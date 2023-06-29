@@ -4,6 +4,7 @@
 //  Created by 2bit on 2023/06/29.
 //
 
+#import "ofxVisionObjC_ARCMacro.h"
 #import "ofxVisionUtility.h"
 
 std::shared_ptr<ofImage> pixelBufferToOfImage(CVPixelBufferRef pixelBuffer) {

@@ -7,6 +7,8 @@
 #include "ofxVisionPersonSegmentation.h"
 #include "ofxVisionUtility.h"
 
+#import "ofxVisionObjC_ARCMacro.h"
+
 #include "ofLog.h"
 
 #import <CoreImage/CoreImage.h>
