@@ -4,7 +4,7 @@
 //  Created by 2bit on 2023/06/29.
 //
 
-#import "ofxVisionObjC_ARCMacro.h"
+#import "ofxVisionObjCUtility.h"
 #import "ofxVisionUtility.h"
 
 #import <CoreVideo/CoreVideo.h>

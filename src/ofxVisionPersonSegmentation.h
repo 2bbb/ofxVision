@@ -6,13 +6,7 @@
 
 #pragma once
 
-#include "ofImage.h"
-
-#include <IOSurface/IOSurface.h>
-#include <CoreVideo/CVPixelBuffer.h>
-
-#include <memory>
-#include <vector>
+#include "ofxVisionBase.h"
 
 namespace ofx {
     namespace Vision {

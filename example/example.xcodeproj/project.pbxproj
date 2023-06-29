@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		43D0A43BB35B98BED9F653F1 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60718F5CF9FF6E5E623F7364 /* IOSurface.framework */; };
+		954959BD2A4E28A3005641C7 /* ofxVisionBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 954959BC2A4E28A3005641C7 /* ofxVisionBase.mm */; };
 		ADABD316598F5C14F2C53FE5 /* Vision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E3B741D748E4E39080DFF0 /* Vision.framework */; };
 		CBDC9F9107D8B55770177A8E /* ofxVisionUtility.mm in Sources */ = {isa = PBXBuildFile; fileRef = BDB98B5D06665D912ABCED52 /* ofxVisionUtility.mm */; };
 		E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1D0A3A1BDC003C02F2 /* main.cpp */; };
@@ -31,7 +32,9 @@
 		220EA72B930486F78F1D18C4 /* ofxVisionUtility.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxVisionUtility.h; path = ../../ofxVision/src/ofxVisionUtility.h; sourceTree = SOURCE_ROOT; };
 		248F5D6FC4671529138E85FD /* ofxVision.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxVision.h; path = ../../ofxVision/src/ofxVision.h; sourceTree = SOURCE_ROOT; };
 		60718F5CF9FF6E5E623F7364 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = /System/Library/Frameworks/IOSurface.framework; sourceTree = "<group>"; };
-		95F64FF42A4DBA5700902F18 /* ofxVisionObjC_ARCMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofxVisionObjC_ARCMacro.h; path = ../src/ofxVisionObjC_ARCMacro.h; sourceTree = "<group>"; };
+		954959BB2A4E28A3005641C7 /* ofxVisionBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofxVisionBase.h; path = ../src/ofxVisionBase.h; sourceTree = "<group>"; };
+		954959BC2A4E28A3005641C7 /* ofxVisionBase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ofxVisionBase.mm; path = ../src/ofxVisionBase.mm; sourceTree = "<group>"; };
+		95F64FF42A4DBA5700902F18 /* ofxVisionObjCUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofxVisionObjCUtility.h; path = ../src/ofxVisionObjCUtility.h; sourceTree = "<group>"; };
 		BDB98B5D06665D912ABCED52 /* ofxVisionUtility.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = ofxVisionUtility.mm; path = ../../ofxVision/src/ofxVisionUtility.mm; sourceTree = SOURCE_ROOT; };
 		D3E3B741D748E4E39080DFF0 /* Vision.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vision.framework; path = /System/Library/Frameworks/Vision.framework; sourceTree = "<group>"; };
 		DBC861D8572E9CF3D7972C0E /* ofxVisionPersonSegmentation.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = ofxVisionPersonSegmentation.mm; path = ../../ofxVision/src/ofxVisionPersonSegmentation.mm; sourceTree = SOURCE_ROOT; };
@@ -244,11 +247,13 @@
 			isa = PBXGroup;
 			children = (
 				248F5D6FC4671529138E85FD /* ofxVision.h */,
-				FDF179EC90657B7E77FE1828 /* ofxVisionPersonSegmentation.h */,
-				DBC861D8572E9CF3D7972C0E /* ofxVisionPersonSegmentation.mm */,
 				220EA72B930486F78F1D18C4 /* ofxVisionUtility.h */,
 				BDB98B5D06665D912ABCED52 /* ofxVisionUtility.mm */,
-				95F64FF42A4DBA5700902F18 /* ofxVisionObjC_ARCMacro.h */,
+				95F64FF42A4DBA5700902F18 /* ofxVisionObjCUtility.h */,
+				954959BB2A4E28A3005641C7 /* ofxVisionBase.h */,
+				954959BC2A4E28A3005641C7 /* ofxVisionBase.mm */,
+				FDF179EC90657B7E77FE1828 /* ofxVisionPersonSegmentation.h */,
+				DBC861D8572E9CF3D7972C0E /* ofxVisionPersonSegmentation.mm */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -689,6 +694,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				954959BD2A4E28A3005641C7 /* ofxVisionBase.mm in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 				F61A1F67EA68DC79992E6243 /* ofxVisionPersonSegmentation.mm in Sources */,

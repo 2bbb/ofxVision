@@ -9,6 +9,7 @@
 #include "ofImage.h"
 
 #import <CoreGraphics/CoreGraphics.h>
+#import <CoreVideo/CoreVideo.h>
 
 #include <memory>
 
