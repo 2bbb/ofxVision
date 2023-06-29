@@ -76,6 +76,43 @@
 				<key>sourceTree</key>
 				<string>&lt;group&gt;</string>
 			</dict>
+			<key>CBDC9F9107D8B55770177A8E</key>
+			<dict>
+				<key>fileRef</key>
+				<string>BDB98B5D06665D912ABCED52</string>
+				<key>isa</key>
+				<string>PBXBuildFile</string>
+			</dict>
+			<key>BDB98B5D06665D912ABCED52</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.cpp.objcpp</string>
+				<key>fileEncoding</key>
+				<string>4</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>ofxVisionUtility.mm</string>
+				<key>path</key>
+				<string>../../ofxVision/src/ofxVisionUtility.mm</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>220EA72B930486F78F1D18C4</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>4</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>ofxVisionUtility.h</string>
+				<key>path</key>
+				<string>../../ofxVision/src/ofxVisionUtility.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
 			<key>F61A1F67EA68DC79992E6243</key>
 			<dict>
 				<key>fileRef</key>
@@ -120,6 +157,8 @@
 					<string>248F5D6FC4671529138E85FD</string>
 					<string>FDF179EC90657B7E77FE1828</string>
 					<string>DBC861D8572E9CF3D7972C0E</string>
+					<string>220EA72B930486F78F1D18C4</string>
+					<string>BDB98B5D06665D912ABCED52</string>
 				</array>
 				<key>isa</key>
 				<string>PBXGroup</string>
@@ -153,143 +192,6 @@
 				<string>ofxVision.h</string>
 				<key>path</key>
 				<string>../../ofxVision/src/ofxVision.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>B34814F69BAC8CE74E94F20A</key>
-			<dict>
-				<key>children</key>
-				<array>
-					<string>60718F5CF9FF6E5E623F7364</string>
-				</array>
-				<key>isa</key>
-				<string>PBXGroup</string>
-				<key>name</key>
-				<string>frameworks</string>
-				<key>sourceTree</key>
-				<string>&lt;group&gt;</string>
-			</dict>
-			<key>43D0A43BB35B98BED9F653F1</key>
-			<dict>
-				<key>fileRef</key>
-				<string>60718F5CF9FF6E5E623F7364</string>
-				<key>isa</key>
-				<string>PBXBuildFile</string>
-			</dict>
-			<key>60718F5CF9FF6E5E623F7364</key>
-			<dict>
-				<key>lastKnownFileType</key>
-				<string>wrapper.framework</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>IOSurface.framework</string>
-				<key>path</key>
-				<string>/System/Library/Frameworks/IOSurface.framework</string>
-				<key>sourceTree</key>
-				<string>&lt;group&gt;</string>
-			</dict>
-			<key>38B3205ECB69F77751E64B24</key>
-			<dict>
-				<key>fileRef</key>
-				<string>44DE592657D19395BEEE8611</string>
-				<key>isa</key>
-				<string>PBXBuildFile</string>
-			</dict>
-			<key>44DE592657D19395BEEE8611</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.cpp.objcpp</string>
-				<key>fileEncoding</key>
-				<string>4</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>ofxIOSurfaceTexture.mm</string>
-				<key>path</key>
-				<string>../../../addons/ofxIOSurfaceTexture/src/ofxIOSurfaceTexture.mm</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>656698E40E26C3DBD70D7479</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>4</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>ofxIOSurfaceTexture.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxIOSurfaceTexture/src/ofxIOSurfaceTexture.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>01483DF63D359E529FF19754</key>
-			<dict>
-				<key>fileRef</key>
-				<string>F3DBDCF7A401751533B1CB11</string>
-				<key>isa</key>
-				<string>PBXBuildFile</string>
-			</dict>
-			<key>F3DBDCF7A401751533B1CB11</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.cpp.objcpp</string>
-				<key>fileEncoding</key>
-				<string>4</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>ofxIOSurface.mm</string>
-				<key>path</key>
-				<string>../../../addons/ofxIOSurfaceTexture/src/ofxIOSurface.mm</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>604E0D33AD0E1422C8A04ED5</key>
-			<dict>
-				<key>children</key>
-				<array>
-					<string>C9812F16011B6BF181B55EC5</string>
-					<string>F3DBDCF7A401751533B1CB11</string>
-					<string>656698E40E26C3DBD70D7479</string>
-					<string>44DE592657D19395BEEE8611</string>
-				</array>
-				<key>isa</key>
-				<string>PBXGroup</string>
-				<key>name</key>
-				<string>src</string>
-				<key>sourceTree</key>
-				<string>&lt;group&gt;</string>
-			</dict>
-			<key>6E5CDEA177543A8C7510F517</key>
-			<dict>
-				<key>children</key>
-				<array>
-					<string>604E0D33AD0E1422C8A04ED5</string>
-					<string>B34814F69BAC8CE74E94F20A</string>
-				</array>
-				<key>isa</key>
-				<string>PBXGroup</string>
-				<key>name</key>
-				<string>ofxIOSurfaceTexture</string>
-				<key>sourceTree</key>
-				<string>&lt;group&gt;</string>
-			</dict>
-			<key>C9812F16011B6BF181B55EC5</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>4</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>ofxIOSurface.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxIOSurfaceTexture/src/ofxIOSurface.h</string>
 				<key>sourceTree</key>
 				<string>SOURCE_ROOT</string>
 			</dict>
@@ -463,7 +365,6 @@ fi
 						<string>$(OF_CORE_HEADERS)</string>
 						<string>src</string>
 						<string>src</string>
-						<string>../../../addons/ofxIOSurfaceTexture/src</string>
 						<string>../../ofxVision/src</string>
 					</array>
 					<key>MACOSX_DEPLOYMENT_TARGET</key>
@@ -497,7 +398,6 @@ fi
 						<string>$(inherited)</string>
 						<string>/System/Library/Frameworks</string>
 						<string>/System/Library/Frameworks</string>
-						<string>/System/Library/Frameworks</string>
 					</array>
 					<key>GCC_GENERATE_DEBUGGING_SYMBOLS</key>
 					<string>YES</string>
@@ -510,7 +410,6 @@ fi
 						<string>$(OF_CORE_HEADERS)</string>
 						<string>src</string>
 						<string>src</string>
-						<string>../../../addons/ofxIOSurfaceTexture/src</string>
 						<string>../../ofxVision/src</string>
 					</array>
 					<key>ICON</key>
@@ -547,7 +446,6 @@ fi
 			<dict>
 				<key>children</key>
 				<array>
-					<string>6E5CDEA177543A8C7510F517</string>
 					<string>40B373AE7672431BDEAE813E</string>
 				</array>
 				<key>isa</key>
@@ -3315,7 +3213,6 @@ fi
 						<string>$(OF_CORE_HEADERS)</string>
 						<string>src</string>
 						<string>src</string>
-						<string>../../../addons/ofxIOSurfaceTexture/src</string>
 						<string>../../ofxVision/src</string>
 					</array>
 					<key>MACOSX_DEPLOYMENT_TARGET</key>
@@ -3379,7 +3276,6 @@ fi
 						<string>$(OF_CORE_HEADERS)</string>
 						<string>src</string>
 						<string>src</string>
-						<string>../../../addons/ofxIOSurfaceTexture/src</string>
 						<string>../../ofxVision/src</string>
 					</array>
 					<key>MACOSX_DEPLOYMENT_TARGET</key>
@@ -3406,9 +3302,8 @@ fi
 				<array>
 					<string>E4B69E200A3A1BDC003C02F2</string>
 					<string>E4B69E210A3A1BDC003C02F2</string>
-					<string>01483DF63D359E529FF19754</string>
-					<string>38B3205ECB69F77751E64B24</string>
 					<string>F61A1F67EA68DC79992E6243</string>
+					<string>CBDC9F9107D8B55770177A8E</string>
 				</array>
 				<key>isa</key>
 				<string>PBXSourcesBuildPhase</string>
@@ -3422,7 +3317,6 @@ fi
 				<key>files</key>
 				<array>
 					<string>E4328149138ABC9F0047C5CB</string>
-					<string>43D0A43BB35B98BED9F653F1</string>
 					<string>ADABD316598F5C14F2C53FE5</string>
 					<string>43D0A43BB35B98BED9F653F1</string>
 				</array>
@@ -3502,7 +3396,6 @@ fi
 						<string>$(inherited)</string>
 						<string>/System/Library/Frameworks</string>
 						<string>/System/Library/Frameworks</string>
-						<string>/System/Library/Frameworks</string>
 					</array>
 					<key>GCC_DYNAMIC_NO_PIC</key>
 					<string>NO</string>
@@ -3515,7 +3408,6 @@ fi
 						<string>$(OF_CORE_HEADERS)</string>
 						<string>src</string>
 						<string>src</string>
-						<string>../../../addons/ofxIOSurfaceTexture/src</string>
 						<string>../../ofxVision/src</string>
 					</array>
 					<key>ICON</key>
@@ -3561,7 +3453,6 @@ fi
 						<string>$(inherited)</string>
 						<string>/System/Library/Frameworks</string>
 						<string>/System/Library/Frameworks</string>
-						<string>/System/Library/Frameworks</string>
 					</array>
 					<key>GCC_GENERATE_DEBUGGING_SYMBOLS</key>
 					<string>YES</string>
@@ -3572,7 +3463,6 @@ fi
 						<string>$(OF_CORE_HEADERS)</string>
 						<string>src</string>
 						<string>src</string>
-						<string>../../../addons/ofxIOSurfaceTexture/src</string>
 						<string>../../ofxVision/src</string>
 					</array>
 					<key>ICON</key>

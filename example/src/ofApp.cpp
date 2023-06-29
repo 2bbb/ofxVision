@@ -1,28 +1,21 @@
 #include "ofxVision.h"
-#include "ofxIOSurfaceTexture.h"
 #include "ofMain.h"
 
 class ofApp : public ofBaseApp {
     ofVideoGrabber grabber;
-    ofxIOSurfaceFbo fbo;
     ofx::Vision::PersonSegmentation person;
     std::shared_ptr<ofImage> image;
 public:
 	void setup() {
         grabber.setDeviceID(1);
         grabber.setup(1280, 720);
-        fbo.allocate(640, 360, GL_RGBA);
         person.setup();
 	}
 	void update() {
         ofSetWindowTitle(ofToString(ofGetFrameRate(), 3));
         grabber.update();
         if(grabber.isFrameNew()) {
-            fbo.begin();
-            ofSetColor(255);
-            grabber.draw(0, 0, fbo.getWidth(), fbo.getHeight());
-            fbo.end();
-            image = person.detect(fbo.surfaceRef());
+            image = person.detect(grabber);
         }
 	}
 	void draw() {
