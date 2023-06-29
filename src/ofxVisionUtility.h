@@ -8,9 +8,13 @@
 
 #include "ofImage.h"
 
-#import <CoreImage/CoreImage.h>
+#import <CoreGraphics/CoreGraphics.h>
 
 #include <memory>
 
-std::shared_ptr<ofImage> pixelBufferToOfImage(CVPixelBufferRef pixelBuffer);
-CGImageRef ofBaseHasPixelsToCGImageRef(const ofBaseHasPixels &pix);
+namespace ofx {
+    namespace Vision {
+        std::shared_ptr<ofImage> pixelBufferToOfImage(CVPixelBufferRef pixelBuffer);
+        CGImageRef ofBaseHasPixelsToCGImageRef(const ofBaseHasPixels &pix);
+    }; // namespace Vision
+}; // namespace Vision
