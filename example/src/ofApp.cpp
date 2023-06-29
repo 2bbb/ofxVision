@@ -22,33 +22,17 @@ public:
         if(image) image->draw(0, 0, 1280, 720);
 	}
 
-	void keyPressed(int key) {}
-	void keyReleased(int key) {}
-	void mouseMoved(int x, int y) {}
-	void mouseDragged(int x, int y, int button) {}
-	void mousePressed(int x, int y, int button) {}
-	void mouseReleased(int x, int y, int button) {}
-	void mouseEntered(int x, int y) {}
-	void mouseExited(int x, int y) {}
-	void windowResized(int w, int h) {}
-	void dragEvent(ofDragInfo dragInfo) {}
-	void gotMessage(ofMessage msg) {}
+	void keyPressed(int key) {
+        switch(key) {
+            case '0': person.setQualityLevel(ofx::Vision::PersonSegmentation::QualityLevel::Fast);
+                break;
+            case '1': person.setQualityLevel(ofx::Vision::PersonSegmentation::QualityLevel::Balanced);
+                break;
+            case '2': person.setQualityLevel(ofx::Vision::PersonSegmentation::QualityLevel::Accurate);
+                break;
+        }
+    }
 };
-
-// class subApp : public ofBaseApp {
-// public:
-//     subApp(std::shared_ptr<ofApp> mainApp) : mainApp{mainApp}
-//     {};
-    
-//     void draw() {
-
-//     }
-//     void keyPressed(int key) {
-//         mainApp->keyPressed(key);
-//     }
-
-//     std::shared_ptr<ofApp> mainApp;
-// };
 
 int main() {
     ofGLFWWindowSettings settings;
@@ -60,11 +44,5 @@ int main() {
     std::shared_ptr<ofApp> app(new ofApp());
     ofRunApp(window, app);
     
-    // settings.setSize(640, 360);
-    // settings.shareContextWith = window;
-    // std::shared_ptr<ofAppBaseWindow> sub_window = ofCreateWindow(settings);
-    // std::shared_ptr<subApp> sub_window_app(new subApp(app));
-    // ofRunApp(sub_window, sub_window_app);
-
     ofRunMainLoop();
 }
