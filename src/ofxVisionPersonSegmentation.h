@@ -40,3 +40,5 @@ namespace ofx {
         };
     }; // namespace Vision
 }; // namespace ofx
+
+using ofxVisionPersonSegmentation = ofx::Vision::PersonSegmentation;

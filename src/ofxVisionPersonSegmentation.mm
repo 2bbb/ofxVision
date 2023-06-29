@@ -4,10 +4,10 @@
 //  Created by 2bit on 2023/06/29.
 //
 
+#import "ofxVisionObjC_ARCMacro.h"
+
 #include "ofxVisionPersonSegmentation.h"
 #include "ofxVisionUtility.h"
-
-#import "ofxVisionObjC_ARCMacro.h"
 
 #include "ofLog.h"
 

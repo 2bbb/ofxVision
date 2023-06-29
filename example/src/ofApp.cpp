@@ -3,7 +3,7 @@
 
 class ofApp : public ofBaseApp {
     ofVideoGrabber grabber;
-    ofx::Vision::PersonSegmentation person;
+    ofxVisionPersonSegmentation person;
     std::shared_ptr<ofImage> image;
 public:
 	void setup() {
@@ -24,11 +24,11 @@ public:
 
 	void keyPressed(int key) {
         switch(key) {
-            case '0': person.setQualityLevel(ofx::Vision::PersonSegmentation::QualityLevel::Fast);
+            case '0': person.setQualityLevel(ofxVisionPersonSegmentation::QualityLevel::Fast);
                 break;
-            case '1': person.setQualityLevel(ofx::Vision::PersonSegmentation::QualityLevel::Balanced);
+            case '1': person.setQualityLevel(ofxVisionPersonSegmentation::QualityLevel::Balanced);
                 break;
-            case '2': person.setQualityLevel(ofx::Vision::PersonSegmentation::QualityLevel::Accurate);
+            case '2': person.setQualityLevel(ofxVisionPersonSegmentation::QualityLevel::Accurate);
                 break;
         }
     }
