@@ -20,7 +20,7 @@ namespace ofx {
             enum class QualityLevel {
                 Fast,
                 Balanced,
-                Accurate, // TODO: fix result will be broken when accurate
+                Accurate,
             };
             
             void setup(QualityLevel qualityLevel = QualityLevel::Fast);

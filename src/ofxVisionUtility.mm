@@ -11,9 +11,11 @@ std::shared_ptr<ofImage> pixelBufferToOfImage(CVPixelBufferRef pixelBuffer) {
     std::shared_ptr<ofImage> result = std::make_shared<ofImage>();
     if(CVPixelBufferLockBaseAddress(pixelBuffer, 0) == kCVReturnSuccess) {
         auto base = (uint8_t *)CVPixelBufferGetBaseAddress(pixelBuffer);
-        auto width = CVPixelBufferGetWidth(pixelBuffer);
+        auto real_width = CVPixelBufferGetWidth(pixelBuffer);
+        auto width = CVPixelBufferGetBytesPerRow(pixelBuffer);
         auto height = CVPixelBufferGetHeight(pixelBuffer);
         result->setFromPixels(base, width, height, OF_IMAGE_GRAYSCALE);
+        if(width != real_width) result->crop(0, 0, real_width, height);
         CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
     }
     return result;
