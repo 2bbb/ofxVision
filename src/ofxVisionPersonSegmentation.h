@@ -17,12 +17,25 @@
 namespace ofx {
     namespace Vision {
         struct PersonSegmentation {
-            void setup();
+            enum class QualityLevel {
+                Fast,
+                Balanced,
+                Accurate
+            };
+            
+            void setup(QualityLevel qualityLevel = QualityLevel::Fast);
             std::shared_ptr<ofImage> detect(const ofBaseHasPixels &pix);
             std::shared_ptr<ofImage> detect(IOSurfaceRef surace);
             std::shared_ptr<ofImage> detect(CVPixelBufferRef pix);
             ~PersonSegmentation();
+            
+            QualityLevel getQualityLevel() const
+            { return qualityLevel; };
+            void setQualityLevel(QualityLevel level)
+            { qualityLevel = level; };
+
         protected:
+            QualityLevel qualityLevel{QualityLevel::Fast};
             void *handler_impl;
         };
     }; // namespace Vision

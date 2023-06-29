@@ -14,17 +14,31 @@
 
 namespace ofx {
     namespace Vision {
-        VNGeneratePersonSegmentationRequest *createRequest() {
+        VNGeneratePersonSegmentationRequestQualityLevel conv(PersonSegmentation::QualityLevel level) {
+            switch(level) {
+                case PersonSegmentation::QualityLevel::Fast:
+                    return VNGeneratePersonSegmentationRequestQualityLevelFast;
+                case PersonSegmentation::QualityLevel::Balanced:
+                    return VNGeneratePersonSegmentationRequestQualityLevelBalanced;
+                case PersonSegmentation::QualityLevel::Accurate:
+                    return VNGeneratePersonSegmentationRequestQualityLevelAccurate;
+            }
+        }
+        
+        VNGeneratePersonSegmentationRequest *createRequest(PersonSegmentation::QualityLevel qualityLevel) {
             VNGeneratePersonSegmentationRequest *request = [[VNGeneratePersonSegmentationRequest alloc] init];
-            request.qualityLevel = VNGeneratePersonSegmentationRequestQualityLevelFast;
+            request.qualityLevel = conv(qualityLevel);
             request.outputPixelFormat = kCVPixelFormatType_OneComponent8;
             OFX_VISION_AUTORELEASE(request);
             return request;
         }
         
-        std::shared_ptr<ofImage> detectWithCIImage(void *handler_impl, CIImage *image) {
+        std::shared_ptr<ofImage> detectWithCIImage(void *handler_impl,
+                                                   PersonSegmentation::QualityLevel qualityLevel,
+                                                   CIImage *image)
+        {
             VNSequenceRequestHandler *handler = (VNSequenceRequestHandler *)handler_impl;
-            VNGeneratePersonSegmentationRequest *request = createRequest();
+            VNGeneratePersonSegmentationRequest *request = createRequest(qualityLevel);
             
             NSError *err = nil;
             [handler performRequests:@[request]
@@ -39,22 +53,23 @@ namespace ofx {
             return pixelBufferToOfImage(pixelBuffer);
         }
         
-        void PersonSegmentation::setup() {
+        void PersonSegmentation::setup(QualityLevel level) {
+            qualityLevel = level;
             VNSequenceRequestHandler *handler = [[VNSequenceRequestHandler alloc] init];
             handler_impl = (OFX_VISION_BRIDGE_RETAINED void *)handler;
         }
         
         std::shared_ptr<ofImage> PersonSegmentation::detect(const ofBaseHasPixels &pix) {
             CGImageRef cgImage = ofBaseHasPixelsToCGImageRef(pix);
-            return detectWithCIImage(handler_impl, [CIImage imageWithCGImage:cgImage]);
+            return detectWithCIImage(handler_impl, qualityLevel, [CIImage imageWithCGImage:cgImage]);
         }
         
         std::shared_ptr<ofImage> PersonSegmentation::detect(IOSurfaceRef surface) {
-            return detectWithCIImage(handler_impl, [CIImage imageWithIOSurface:surface]);
+            return detectWithCIImage(handler_impl, qualityLevel, [CIImage imageWithIOSurface:surface]);
         }
         
         std::shared_ptr<ofImage> PersonSegmentation::detect(CVPixelBufferRef pix) {
-            return detectWithCIImage(handler_impl, [CIImage imageWithCVPixelBuffer:pix]);
+            return detectWithCIImage(handler_impl, qualityLevel, [CIImage imageWithCVPixelBuffer:pix]);
         }
         
         PersonSegmentation::~PersonSegmentation() {
