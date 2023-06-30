@@ -25,6 +25,60 @@ namespace ofx {
             return result;
         }
 
+        std::shared_ptr<ofFloatImage> pixelBufferToOfFloatImage(CVPixelBufferRef pixelBuffer) {
+            std::shared_ptr<ofFloatImage> result = std::make_shared<ofFloatImage>();
+            if(CVPixelBufferLockBaseAddress(pixelBuffer, 0) == kCVReturnSuccess) {
+                auto base = (float *)CVPixelBufferGetBaseAddress(pixelBuffer);
+                auto real_width = CVPixelBufferGetWidth(pixelBuffer);
+                auto width = CVPixelBufferGetBytesPerRow(pixelBuffer) / sizeof(float);
+                auto height = CVPixelBufferGetHeight(pixelBuffer);
+                result->setFromPixels(base, width, height, OF_IMAGE_GRAYSCALE);
+                if(width != real_width) result->crop(0, 0, real_width, height);
+                CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+            }
+            return result;
+        }
+
+        ofTexture pixelBufferToOfFloatTexture(CVPixelBufferRef pixelBuffer) {
+            if(CVPixelBufferLockBaseAddress(pixelBuffer, 0) == kCVReturnSuccess) {
+                auto base = (float *)CVPixelBufferGetBaseAddress(pixelBuffer);
+                auto width = CVPixelBufferGetWidth(pixelBuffer);
+                auto height = CVPixelBufferGetHeight(pixelBuffer);
+                ofTexture texture;
+                bool b = ofGetUsingArbTex();
+//                texture.loadData(base, width, height, GL_RG32F);
+                texture.allocate(width, height, GL_RG32F, true, GL_RG, GL_FLOAT);
+                texture.loadData(base, width, height, GL_RG, GL_FLOAT);
+//                FILE *fp = fopen("/Users/2bit/Downloads/test.bin", "wb");
+//                fwrite(base, sizeof(float), width * height * 2, fp);
+//                fclose(fp);
+                
+                CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+                return texture;
+            }
+            return {};
+        }
+        
+        std::shared_ptr<ofFloatImage> pixelBuffer2fToOfFloatImage(CVPixelBufferRef pixelBuffer) {
+            if(CVPixelBufferLockBaseAddress(pixelBuffer, 0) == kCVReturnSuccess) {
+                auto base = (float *)CVPixelBufferGetBaseAddress(pixelBuffer);
+                auto width = CVPixelBufferGetWidth(pixelBuffer);
+                auto height = CVPixelBufferGetHeight(pixelBuffer);
+                auto image = std::make_shared<ofFloatImage>();
+                image->allocate(width, height, OF_IMAGE_COLOR_ALPHA);
+                for(auto j = 0; j < height; ++j) {
+                    for(auto i = 0; i < width; ++i) {
+                        image->setColor(i, j, ofFloatColor(base[2 * (i + j * width)], base[2 * (i + j * width) + 1], 0.0f, 0.0f));
+                    }
+                }
+                image->update();
+                CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+                return image;
+            }
+            return {};
+        }
+
+        
         CGImageRef ofBaseHasPixelsToCGImageRef(const ofBaseHasPixels &pix) {
             auto width = pix.getPixels().getWidth();
             auto height = pix.getPixels().getHeight();

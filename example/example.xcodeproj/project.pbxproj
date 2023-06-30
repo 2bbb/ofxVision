@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		43D0A43BB35B98BED9F653F1 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60718F5CF9FF6E5E623F7364 /* IOSurface.framework */; };
 		954959BD2A4E28A3005641C7 /* ofxVisionBase.mm in Sources */ = {isa = PBXBuildFile; fileRef = 954959BC2A4E28A3005641C7 /* ofxVisionBase.mm */; };
+		954959C02A4E3B65005641C7 /* ofxVisionAttentionBasedSaliencyImage.mm in Sources */ = {isa = PBXBuildFile; fileRef = 954959BF2A4E3B65005641C7 /* ofxVisionAttentionBasedSaliencyImage.mm */; };
+		954959C42A4E47D9005641C7 /* ofxVisionObjectnessBasedSaliencyImage.mm in Sources */ = {isa = PBXBuildFile; fileRef = 954959C32A4E47D9005641C7 /* ofxVisionObjectnessBasedSaliencyImage.mm */; };
+		954E92AA2A4E4FB800D70F8C /* ofxVisionGenerateOpticalFlow.mm in Sources */ = {isa = PBXBuildFile; fileRef = 954E92A92A4E4FB800D70F8C /* ofxVisionGenerateOpticalFlow.mm */; };
 		ADABD316598F5C14F2C53FE5 /* Vision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E3B741D748E4E39080DFF0 /* Vision.framework */; };
 		CBDC9F9107D8B55770177A8E /* ofxVisionUtility.mm in Sources */ = {isa = PBXBuildFile; fileRef = BDB98B5D06665D912ABCED52 /* ofxVisionUtility.mm */; };
 		E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1D0A3A1BDC003C02F2 /* main.cpp */; };
@@ -34,6 +37,13 @@
 		60718F5CF9FF6E5E623F7364 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = /System/Library/Frameworks/IOSurface.framework; sourceTree = "<group>"; };
 		954959BB2A4E28A3005641C7 /* ofxVisionBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofxVisionBase.h; path = ../src/ofxVisionBase.h; sourceTree = "<group>"; };
 		954959BC2A4E28A3005641C7 /* ofxVisionBase.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ofxVisionBase.mm; path = ../src/ofxVisionBase.mm; sourceTree = "<group>"; };
+		954959BE2A4E3B65005641C7 /* ofxVisionAttentionBasedSaliencyImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofxVisionAttentionBasedSaliencyImage.h; path = ../src/ofxVisionAttentionBasedSaliencyImage.h; sourceTree = "<group>"; };
+		954959BF2A4E3B65005641C7 /* ofxVisionAttentionBasedSaliencyImage.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ofxVisionAttentionBasedSaliencyImage.mm; path = ../src/ofxVisionAttentionBasedSaliencyImage.mm; sourceTree = "<group>"; };
+		954959C12A4E4218005641C7 /* ofxVisionObservation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofxVisionObservation.h; path = ../src/ofxVisionObservation.h; sourceTree = "<group>"; };
+		954959C22A4E47D9005641C7 /* ofxVisionObjectnessBasedSaliencyImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxVisionObjectnessBasedSaliencyImage.h; path = ../src/ofxVisionObjectnessBasedSaliencyImage.h; sourceTree = "<group>"; };
+		954959C32A4E47D9005641C7 /* ofxVisionObjectnessBasedSaliencyImage.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ofxVisionObjectnessBasedSaliencyImage.mm; path = ../src/ofxVisionObjectnessBasedSaliencyImage.mm; sourceTree = "<group>"; };
+		954E92A82A4E4FB800D70F8C /* ofxVisionGenerateOpticalFlow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofxVisionGenerateOpticalFlow.h; path = ../src/ofxVisionGenerateOpticalFlow.h; sourceTree = "<group>"; };
+		954E92A92A4E4FB800D70F8C /* ofxVisionGenerateOpticalFlow.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ofxVisionGenerateOpticalFlow.mm; path = ../src/ofxVisionGenerateOpticalFlow.mm; sourceTree = "<group>"; };
 		95F64FF42A4DBA5700902F18 /* ofxVisionObjCUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofxVisionObjCUtility.h; path = ../src/ofxVisionObjCUtility.h; sourceTree = "<group>"; };
 		BDB98B5D06665D912ABCED52 /* ofxVisionUtility.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = ofxVisionUtility.mm; path = ../../ofxVision/src/ofxVisionUtility.mm; sourceTree = SOURCE_ROOT; };
 		D3E3B741D748E4E39080DFF0 /* Vision.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vision.framework; path = /System/Library/Frameworks/Vision.framework; sourceTree = "<group>"; };
@@ -247,6 +257,7 @@
 			isa = PBXGroup;
 			children = (
 				248F5D6FC4671529138E85FD /* ofxVision.h */,
+				954959C12A4E4218005641C7 /* ofxVisionObservation.h */,
 				220EA72B930486F78F1D18C4 /* ofxVisionUtility.h */,
 				BDB98B5D06665D912ABCED52 /* ofxVisionUtility.mm */,
 				95F64FF42A4DBA5700902F18 /* ofxVisionObjCUtility.h */,
@@ -254,6 +265,12 @@
 				954959BC2A4E28A3005641C7 /* ofxVisionBase.mm */,
 				FDF179EC90657B7E77FE1828 /* ofxVisionPersonSegmentation.h */,
 				DBC861D8572E9CF3D7972C0E /* ofxVisionPersonSegmentation.mm */,
+				954959BE2A4E3B65005641C7 /* ofxVisionAttentionBasedSaliencyImage.h */,
+				954959BF2A4E3B65005641C7 /* ofxVisionAttentionBasedSaliencyImage.mm */,
+				954959C22A4E47D9005641C7 /* ofxVisionObjectnessBasedSaliencyImage.h */,
+				954959C32A4E47D9005641C7 /* ofxVisionObjectnessBasedSaliencyImage.mm */,
+				954E92A82A4E4FB800D70F8C /* ofxVisionGenerateOpticalFlow.h */,
+				954E92A92A4E4FB800D70F8C /* ofxVisionGenerateOpticalFlow.mm */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -698,6 +715,9 @@
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 				F61A1F67EA68DC79992E6243 /* ofxVisionPersonSegmentation.mm in Sources */,
+				954959C42A4E47D9005641C7 /* ofxVisionObjectnessBasedSaliencyImage.mm in Sources */,
+				954E92AA2A4E4FB800D70F8C /* ofxVisionGenerateOpticalFlow.mm in Sources */,
+				954959C02A4E3B65005641C7 /* ofxVisionAttentionBasedSaliencyImage.mm in Sources */,
 				CBDC9F9107D8B55770177A8E /* ofxVisionUtility.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

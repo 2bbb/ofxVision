@@ -23,12 +23,15 @@
 #endif
 
 #include "ofxVisionUtility.h"
+#include "ofxVisionObservation.h"
 
 #include "ofBaseTypes.h"
 
 #import <IOSurface/IOSurface.h>
 #import <CoreVideo/CoreVideo.h>
 #import <CoreImage/CoreImage.h>
+#import <Vision/Vision.h>
+
 
 namespace ofx {
     namespace Vision {
@@ -41,6 +44,26 @@ namespace ofx {
             }
             CIImage *toCIImage(IOSurfaceRef surface) {
                 return [CIImage imageWithIOSurface:surface];
+            }
+            
+            Observation::SaliencyImage toOF(VNSaliencyImageObservation *saliencyResult) {
+                Observation::SaliencyImage result;
+                CVPixelBufferRef pixelBuffer = saliencyResult.pixelBuffer;
+                result.pixels = pixelBufferToOfFloatImage(pixelBuffer);
+                auto &salients = result.salientObjects;
+                for(VNRectangleObservation *rect in saliencyResult.salientObjects) {
+                    salients.emplace_back();
+                    auto &s = salients.back();
+                    s.uuid = rect.uuid.UUIDString.UTF8String;
+                    s.segmentationMask.pixels = pixelBufferToOfFloatImage(rect.globalSegmentationMask.pixelBuffer);
+                    if(rect.globalSegmentationMask.featureName) s.segmentationMask.featureName =  rect.globalSegmentationMask.featureName.UTF8String;
+                    s.topLeft = toOF(rect.topLeft);
+                    s.topRight = toOF(rect.topRight);
+                    s.bottomLeft = toOF(rect.bottomLeft);
+                    s.bottomRight = toOF(rect.bottomRight);
+                    s.boundingBox = toOF(rect.boundingBox);
+                }
+                return result;
             }
         }
     };
