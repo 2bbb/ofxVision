@@ -56,11 +56,6 @@ namespace ofx {
             }
         };
         
-        void TargetRequest::setup(QualityLevel level) {
-            Base::setup();
-            qualityLevel = level;
-        }
-        
         TargetRequest::ResultType TargetRequest::detect(const ofBaseHasPixels &pix) {
             CGImageRef cgImage = ofBaseHasPixelsToCGImageRef(pix);
             return detectWithCIImage(handler_impl, qualityLevel, [CIImage imageWithCGImage:cgImage]);

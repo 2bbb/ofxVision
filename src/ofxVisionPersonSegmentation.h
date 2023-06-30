@@ -18,7 +18,10 @@ namespace ofx {
                 Accurate,
             };
             
-            void setup(QualityLevel qualityLevel = QualityLevel::Fast);
+            void setup(QualityLevel qualityLevel = QualityLevel::Fast) {
+                Base::setup();
+                this->qualityLevel = qualityLevel;
+            }
             ResultType detect(const ofBaseHasPixels &pix);
             ResultType detect(IOSurfaceRef surace);
             ResultType detect(CVPixelBufferRef pix);
