@@ -14,3 +14,7 @@
 #include "ofxVisionGenerateOpticalFlow.h"
 
 namespace ofxVision = ofx::Vision;
+
+#if !OFX_VISION_VERSION_CHECK_X(10, 13)
+#   error ofxVision needs macOS 10.13 or newer.
+#endif

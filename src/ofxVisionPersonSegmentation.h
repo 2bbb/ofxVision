@@ -8,6 +8,8 @@
 
 #include "ofxVisionBase.h"
 
+#if OFX_VISION_VERSION_CHECK(12, 0)
+
 #ifdef Request
 #   undef Request
 #endif
@@ -52,3 +54,7 @@ namespace ofx {
 }; // namespace ofx
 
 using ofxVisionPersonSegmentation = ofx::Vision::PersonSegmentation;
+
+#else
+#   warning ofxVisionPersonSegmentation need macOS 12.0~
+#endif

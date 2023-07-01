@@ -1,14 +1,14 @@
 //
-//  ofxVisionObjectnessBasedSaliencyImage.m
-//  example
+//  ofxVisionObjectnessBasedSaliencyImage.mm
 //
 //  Created by 2bit on 2023/06/30.
 //
 
-#import "ofxVisionObjCUtility.h"
-
 #import "ofxVisionObjectnessBasedSaliencyImage.h"
-#include "ofxVisionUtility.h"
+
+#if OFX_VISION_VERSION_CHECK_X(10, 15)
+
+#import "ofxVisionObjCUtility.h"
 
 #include "ofLog.h"
 
@@ -54,3 +54,4 @@ namespace ofx {
     }; // namespace Vision
 }; // namespace ofx
 
+#endif

@@ -9,6 +9,8 @@
 #include "ofImage.h"
 #include "ofVectorMath.h"
 
+#if OFX_VISION_VERSION_CHECK_X(10, 15)
+
 #ifdef Request
 #   undef Request
 #endif
@@ -39,3 +41,7 @@ namespace ofx {
 }; // namespace ofx
 
 using ofxVisionObjectnessBasedSaliencyImage = ofx::Vision::ObjectnessBasedSaliencyImage;
+
+#else
+#   warning ofxVisionObjectnessBasedSaliencyImage need macOS 10.15~
+#endif

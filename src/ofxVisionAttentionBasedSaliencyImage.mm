@@ -12,6 +12,8 @@
 
 #include "ofLog.h"
 
+#if OFX_VISION_VERSION_CHECK_X(10, 15)
+
 namespace ofx {
     namespace Vision {
         using TargetRequest = AttentionBasedSaliencyImage;
@@ -41,8 +43,7 @@ namespace ofx {
                     ofLogError("AttentionBasedSaliencyImage") << err.description.UTF8String;
                     return result;
                 }
-                result = toOF(request.results.firstObject);
-                return result;
+                return toOF(request.results.firstObject);
             }
         };
         
@@ -56,3 +57,4 @@ namespace ofx {
     }; // namespace Vision
 }; // namespace ofx
 
+#endif // OFX_VISION_VERSION_CHECK(10, 15)

@@ -12,6 +12,8 @@
 #   undef Request
 #endif
 
+#if OFX_VISION_VERSION_CHECK(11, 0)
+
 #if __OBJC__
 #   define Request VNDetectHumanHandPoseRequest
 #else
@@ -52,3 +54,6 @@ namespace ofx {
 }; // namespace ofx
 
 using ofxVisionDetectHumanHandPose = ofx::Vision::DetectHumanHandPose;
+#else
+#   warning ofxVisionDetectHumanHandPose need macOS 11.0~
+#endif

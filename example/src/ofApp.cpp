@@ -14,13 +14,22 @@ class ofApp : public ofBaseApp {
         }
     };
     
+#if OFX_VISION_VERSION_CHECK(12, 0)
     RequestAndObservation<ofxVisionPersonSegmentation> person;
+#endif
+    
+#if OFX_VISION_VERSION_CHECK_X(10, 15)
     RequestAndObservation<ofxVisionAttentionBasedSaliencyImage> att_saliency;
     RequestAndObservation<ofxVisionObjectnessBasedSaliencyImage> obj_saliency;
+#endif
+
+#if OFX_VISION_VERSION_CHECK(11, 0)
     RequestAndObservation<ofxVisionDetectHumanHandPose> handpose;
     RequestAndObservation<ofxVisionDetectHumanBodyPose> bodypose;
     RequestAndObservation<ofxVisionGenerateOpticalFlow> optical;
     RequestAndObservation<ofxVisionDetectContours> contours;
+#endif
+
     RequestAndObservation<ofxVisionDetectRectangles> rectangles;
     RequestAndObservation<ofxVisionDetectFaceLandmarks> face_landmarks;
 
@@ -33,17 +42,27 @@ public:
         grabber.setDeviceID(1);
         grabber.setup(1280, 720);
         
+#if OFX_VISION_VERSION_CHECK(12, 0)
         person.setup();
+#endif
+#if OFX_VISION_VERSION_CHECK_X(10, 15)
         att_saliency.setup();
         obj_saliency.setup();
+#endif
+        
+#if OFX_VISION_VERSION_CHECK(11, 0)
         contours.setup();
+#endif
         rectangles.setup();
         face_landmarks.setup();
+        
+#if OFX_VISION_VERSION_CHECK(11, 0)
         optical.setup();
         opticalShader.load("shaders/optical");
         
         handpose.setup(16ul);
         bodypose.setup();
+#endif
         ofEnableAlphaBlending();
         ofSetBackgroundColor(0);
 	}
@@ -53,28 +72,42 @@ public:
         if(grabber.isFrameNew()) {
             switch(mode) {
                 case 0:
+#if OFX_VISION_VERSION_CHECK(12, 0)
                     person.detect(grabber);
+#endif
                     break;
                 case 1:
+#if OFX_VISION_VERSION_CHECK_X(10, 15)
                     att_saliency.detect(grabber);
+#endif
                     break;
                 case 2:
+#if OFX_VISION_VERSION_CHECK_X(10, 15)
                     obj_saliency.detect(grabber);
+#endif
                     break;
                 case 3:
+#if OFX_VISION_VERSION_CHECK(11, 0)
                     handpose.detect(grabber);
+#endif
                     break;
                 case 4:
+#if OFX_VISION_VERSION_CHECK(11, 0)
                     bodypose.detect(grabber);
+#endif
                     break;
                 case 5:
+#if OFX_VISION_VERSION_CHECK(11, 0)
                     contours.detect(grabber);
+#endif
                     break;
                 case 6:
+#if OFX_VISION_VERSION_CHECK(11, 0)
                     if(prev.isAllocated()) {
                         if(ofGetFrameNum() % 6 == 0) optical.setBaseImage(prev);
                         optical.detect(grabber);
                     }
+#endif
                     break;
                 case 7:
                     rectangles.detect(grabber);
@@ -87,13 +120,16 @@ public:
         }
     }
     
+#if OFX_VISION_VERSION_CHECK(12, 0)
     void drawPersonSegmentation() {
         if(person.result) {
             ofSetColor(0, 0, 255, 128);
             person.result->draw(0, 0, 1280, 720);
         }
     }
+#endif
     
+#if OFX_VISION_VERSION_CHECK_X(10, 15)
     void drawObjectnessSaliency() {
         const glm::vec2 s{ofGetWidth(), ofGetHeight()};
         auto &attention = obj_saliency.result;
@@ -109,7 +145,9 @@ public:
             }
         }
     }
-
+#endif
+    
+#if OFX_VISION_VERSION_CHECK_X(10, 15)
     void drawAttentionSaliency() {
         const glm::vec2 s{ofGetWidth(), ofGetHeight()};
         auto &attention = att_saliency.result;
@@ -125,7 +163,9 @@ public:
             }
         }
     }
-    
+#endif
+
+#if OFX_VISION_VERSION_CHECK(11, 0)
     void drawOpticalFlow() {
         auto &flow = optical.result;
 #if OFX_VISION_USE_TEXTURE
@@ -144,7 +184,9 @@ public:
             opticalShader.end();
         }
     }
-    
+#endif
+        
+#if OFX_VISION_VERSION_CHECK(11, 0)
     void drawHandTracking() {
         const glm::vec2 s{ofGetWidth(), ofGetHeight()};
         auto &hands = handpose.result;
@@ -188,7 +230,9 @@ public:
             }
         }
     } // void drawHandTracking()
+#endif
         
+#if OFX_VISION_VERSION_CHECK(11, 0)
     void drawBodyTracking() {
         const glm::vec2 s{ofGetWidth(), ofGetHeight()};
         auto &bodies = bodypose.result;
@@ -210,7 +254,8 @@ public:
             }
         }
     } // void drawHandTracking()
-
+#endif
+        
     void drawContour(std::shared_ptr<ofxVision::Observation::Contour> contour) {
         ofMesh mesh;
         mesh.setMode(OF_PRIMITIVE_LINE_STRIP);
@@ -223,6 +268,7 @@ public:
         }
     }
     
+#if OFX_VISION_VERSION_CHECK(11, 0)
     void drawContours() {
         ofPushMatrix();
         ofScale(ofGetWidth(), ofGetHeight());
@@ -233,7 +279,8 @@ public:
         }
         ofPopMatrix();
     } // void drawContours()
-    
+#endif
+        
     void drawRectangles() {
         ofPushMatrix();
         ofScale(ofGetWidth(), ofGetHeight());
@@ -280,32 +327,60 @@ public:
         
         switch(mode) {
             case 0:
+#if OFX_VISION_VERSION_CHECK(12, 0)
                 drawPersonSegmentation();
                 ofDrawBitmapStringHighlight("person segmentation", 20, 20);
+#else
+                ofDrawBitmapStringHighlight("person segmentation is NOT Available on this macOS version need 12.0~", 20, 20);
+#endif
                 break;
             case 1:
+#if OFX_VISION_VERSION_CHECK_X(10, 15)
                 drawAttentionSaliency();
                 ofDrawBitmapStringHighlight("attention based saliency", 20, 20);
+#else
+                ofDrawBitmapStringHighlight("attention based saliency is NOT Available on this macOS version need 10.15~", 20, 20);
+#endif
                 break;
             case 2:
+#if OFX_VISION_VERSION_CHECK_X(10, 15)
                 drawObjectnessSaliency();
                 ofDrawBitmapStringHighlight("objectness based saliency", 20, 20);
+#else
+                ofDrawBitmapStringHighlight("objectness based saliency is NOT Available on this macOS version need 10.15~", 20, 20);
+#endif
                 break;
             case 3:
+#if OFX_VISION_VERSION_CHECK(11, 0)
                 drawHandTracking();
                 ofDrawBitmapStringHighlight("hand pose detection", 20, 20);
+#else
+                ofDrawBitmapStringHighlight("hand pose detection is NOT Available on this macOS version need 11.0~", 20, 20);
+#endif
                 break;
             case 4:
+#if OFX_VISION_VERSION_CHECK(11, 0)
                 drawBodyTracking();
                 ofDrawBitmapStringHighlight("body pose detection", 20, 20);
+#else
+                ofDrawBitmapStringHighlight("body pose detection is NOT Available on this macOS version need 11.0~", 20, 20);
+#endif
                 break;
             case 5:
+#if OFX_VISION_VERSION_CHECK(11, 0)
                 drawContours();
                 ofDrawBitmapStringHighlight("contours detection", 20, 20);
+#else
+                ofDrawBitmapStringHighlight("contours detection is NOT Available on this macOS version need 11.0~", 20, 20);
+#endif
                 break;
             case 6:
+#if OFX_VISION_VERSION_CHECK(11, 0)
                 drawOpticalFlow();
                 ofDrawBitmapStringHighlight("optical flow", 20, 20);
+#else
+                ofDrawBitmapStringHighlight("optical flow is NOT Available on this macOS version, need 11.0~", 20, 20);
+#endif
                 break;
             case 7:
                 drawRectangles();

@@ -10,6 +10,8 @@
 #   undef Request
 #endif
 
+#if OFX_VISION_VERSION_CHECK(11, 0)
+
 #if __OBJC__
 #   define Request VNGenerateOpticalFlowRequest
 #else
@@ -64,3 +66,7 @@ namespace ofx {
 }; // namespace ofx
 
 using ofxVisionGenerateOpticalFlow = ofx::Vision::GenerateOpticalFlow;
+
+#else
+#   warning ofxVisionGenerateOpticalFlow need macOS 11.0~
+#endif

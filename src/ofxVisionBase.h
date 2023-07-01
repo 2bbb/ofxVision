@@ -7,6 +7,7 @@
 #pragma once
 
 #include "ofxVisionObservation.h"
+#include "ofxVisionUtility.h"
 
 #include "ofBaseTypes.h"
 

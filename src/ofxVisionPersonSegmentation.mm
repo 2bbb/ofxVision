@@ -4,10 +4,11 @@
 //  Created by 2bit on 2023/06/29.
 //
 
-#import "ofxVisionObjCUtility.h"
-
 #include "ofxVisionPersonSegmentation.h"
-#include "ofxVisionUtility.h"
+
+#if OFX_VISION_VERSION_CHECK(12, 0)
+
+#import "ofxVisionObjCUtility.h"
 
 #include "ofLog.h"
 
@@ -68,3 +69,5 @@ namespace ofx {
         }
     }; // namespace Vision
 }; // namespace ofx
+
+#endif

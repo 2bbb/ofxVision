@@ -7,6 +7,8 @@
 
 #include "ofxVisionBase.h"
 
+#if OFX_VISION_VERSION_CHECK_X(10, 13)
+
 #ifdef Request
 #   undef Request
 #endif
@@ -36,3 +38,7 @@ namespace ofx {
 }; // namespace ofx
 
 using ofxVisionDetectFaceLandmarks = ofx::Vision::DetectFaceLandmarks;
+
+#else
+#   error ofxVisionDetectFaceLandmarks need macOS 10.13~
+#endif

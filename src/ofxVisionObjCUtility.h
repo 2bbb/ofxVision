@@ -50,21 +50,27 @@ namespace ofx {
             Observation::Rectangle toOF(VNRectangleObservation *r) {
                 Observation::Rectangle rect;
                 rect.uuid = r.uuid.UUIDString.UTF8String;
-                rect.segmentationMask.pixels = pixelBufferToOfFloatImage(r.globalSegmentationMask.pixelBuffer);
-                rect.segmentationMask.featureName =  r.globalSegmentationMask.featureName.UTF8String ?: "";
+                if (@available(macOS 12.0, *)) {
+                    rect.segmentationMask.pixels = pixelBufferToOfFloatImage(r.globalSegmentationMask.pixelBuffer);
+                } else {
+                    // Fallback on earlier versions
+                }
+                if (@available(macOS 12.0, *)) {
+                    rect.segmentationMask.featureName =  r.globalSegmentationMask.featureName.UTF8String ?: "";
+                } else {
+                    // Fallback on earlier versions
+                    rect.segmentationMask.featureName = "";
+                }
                 rect.topLeft = toOF(r.topLeft);
-                rect.topLeft.y = 1.0f - rect.topLeft.y;
                 rect.topRight = toOF(r.topRight);
-                rect.topRight.y = 1.0f - rect.topRight.y;
                 rect.bottomLeft = toOF(r.bottomLeft);
-                rect.bottomLeft.y = 1.0f - rect.bottomLeft.y;
                 rect.bottomRight = toOF(r.bottomRight);
-                rect.bottomRight.y = 1.0f - rect.bottomRight.y;
 
                 rect.boundingBox = toOF(r.boundingBox);
                 return rect;
             }
-            
+
+#if OFX_VISION_VERSION_CHECK_X(10, 15)
             Observation::SaliencyImage toOF(VNSaliencyImageObservation *saliencyResult) {
                 Observation::SaliencyImage result;
                 result.uuid = saliencyResult.uuid.UUIDString.UTF8String;
@@ -78,7 +84,9 @@ namespace ofx {
                 }
                 return result;
             }
+#endif
             
+#if OFX_VISION_VERSION_CHECK(11, 0)
             Observation::DetectedPoint toOF(VNDetectedPoint *p) {
                 Observation::DetectedPoint point;
                 point.position.x = p.x;
@@ -86,7 +94,9 @@ namespace ofx {
                 point.confidence = p.confidence;
                 return point;
             }
+#endif
             
+#if OFX_VISION_VERSION_CHECK(11, 0)
             Observation::RecognizedPoint toOF(VNRecognizedPoint *p) {
                 Observation::RecognizedPoint point;
                 point.position.x = p.x;
@@ -105,10 +115,15 @@ namespace ofx {
                 if(p) point = toOF(p);
                 else point.confidence = -1.0f;
             }
+#if OFX_VISION_VERSION_CHECK(11, 0)
             Observation::HandPose toOF(VNHumanHandPoseObservation *hand) {
                 if(!hand) return {};
                 Observation::HandPose pose;
-                pose.chirality = (Observation::HandPose::Chirality)hand.chirality;
+                if (@available(macOS 12.0, *)) {
+                    pose.chirality = (Observation::HandPose::Chirality)hand.chirality;
+                } else {
+                    // Fallback on earlier versions
+                }
 #define conv(JointName, point) convHandPose(hand, VNHumanHandPoseObservationJointName##JointName, point)
                 conv(ThumbTip, pose.thumb.tip);
                 conv(ThumbIP,  pose.thumb.ip);
@@ -139,7 +154,11 @@ namespace ofx {
 #undef conv
                 return pose;
             }
+#endif // #if OFX_VISION_VERSION_CHECK(11, 0)
             
+#endif // #ifdef __OBJC__
+            
+#if OFX_VISION_VERSION_CHECK(11, 0)
             void convBodyPose(VNHumanBodyPoseObservation *body,
                               VNHumanBodyPoseObservationJointName name,
                               Observation::RecognizedPoint &point)
@@ -149,7 +168,9 @@ namespace ofx {
                 if(p) point = toOF(p);
                 else point.confidence = -1.0f;
             }
-
+#endif
+            
+#if OFX_VISION_VERSION_CHECK(11, 0)
             Observation::BodyPose toOF(VNHumanBodyPoseObservation *body) {
                 if(!body) return {};
                 Observation::BodyPose pose;
@@ -181,6 +202,7 @@ namespace ofx {
 #undef conv
                 return pose;
             }
+#endif
             
             Observation::IndexPath toOF(NSIndexPath *path) {
                 Observation::IndexPath indexPath;
@@ -191,6 +213,7 @@ namespace ofx {
                 return indexPath;
             } // Observation::IndexPath toOF(NSIndexPath *path)
             
+#if OFX_VISION_VERSION_CHECK(11, 0)
             std::shared_ptr<Observation::Contour> toOF(VNContour *c) {
                 auto contour = std::make_shared<Observation::Contour>();
                 contour->aspectRatio = c.aspectRatio;
@@ -206,7 +229,9 @@ namespace ofx {
                 }
                 return contour;
             } // Observation::Contour toOF(VNContour *c)
+#endif
             
+#if OFX_VISION_VERSION_CHECK(11, 0)
             Observation::Contours toOF(VNContoursObservation *cs) {
                 Observation::Contours contours;
                 
@@ -220,6 +245,7 @@ namespace ofx {
                 }
                 return contours;
             } // Observation::Contours toOF(VNContoursObservation *cs)
+#endif
             
             Observation::FaceLandmarkRegion2D toOF(VNFaceLandmarkRegion2D *f) {
                 Observation::FaceLandmarkRegion2D face;
@@ -279,24 +305,49 @@ namespace ofx {
             float toOF(NSNumber *n) {
                 return n ? n.floatValue : std::numeric_limits<float>::quiet_NaN();
             }
+            
+#if OFX_VISION_VERSION_CHECK_X(10, 13)
             Observation::Face toOF(VNFaceObservation *f) {
                 Observation::Face face;
                 
                 face.uuid = f.uuid.UUIDString.UTF8String;
-                face.segmentationMask.pixels = pixelBufferToOfFloatImage(f.globalSegmentationMask.pixelBuffer);
-                face.segmentationMask.featureName =  f.globalSegmentationMask.featureName.UTF8String ?: "";
+                if (@available(macOS 12.0, *)) {
+                    face.segmentationMask.pixels = pixelBufferToOfFloatImage(f.globalSegmentationMask.pixelBuffer);
+                    face.segmentationMask.featureName =  f.globalSegmentationMask.featureName.UTF8String ?: "";
+                } else {
+                    // Fallback on earlier versions
+                    face.segmentationMask.featureName = "";
+                }
                 face.boundingBox = toOF(f.boundingBox);
 
                 face.landmarks = toOF(f.landmarks);
                 
-                face.roll = toOF(f.roll);
-                face.pitch = toOF(f.pitch);
-                face.yaw = toOF(f.yaw);
+                if (@available(macOS 10.14, *)) {
+                    face.roll = toOF(f.roll);
+                    face.yaw = toOF(f.yaw);
+                } else {
+                    // Fallback on earlier versions
+                    face.roll = std::numeric_limits<float>::quiet_NaN();
+                    face.yaw = std::numeric_limits<float>::quiet_NaN();
+                }
                 
-                face.faceCaptureQuality = toOF(f.faceCaptureQuality);
+                if (@available(macOS 12.0, *)) {
+                    face.pitch = toOF(f.pitch);
+                } else {
+                    // Fallback on earlier versions
+                    face.pitch = std::numeric_limits<float>::quiet_NaN();
+                }
+                
+                if (@available(macOS 10.15, *)) {
+                    face.faceCaptureQuality = toOF(f.faceCaptureQuality);
+                } else {
+                    // Fallback on earlier versions
+                    face.faceCaptureQuality = std::numeric_limits<float>::quiet_NaN();
+                }
                 
                 return face;
             } // Observation::Face toOF(VNFaceObservation *f)
+#endif
         }
     };
 };

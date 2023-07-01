@@ -15,6 +15,19 @@
 
 #include <memory>
 
+#include <Availability.h>
+
+#ifdef MAC_OS_X_VERSION_MIN_REQUIRED
+#   define OFX_VISION_MAC_OS_VERSION_MIN_REQUIRED MAC_OS_X_VERSION_MIN_REQUIRED
+#elif MAC_OS_VERSION_MIN_REQUIRED
+#   define OFX_VISION_MAC_OS_VERSION_MIN_REQUIRED MAC_OS_VERSION_MIN_REQUIRED
+#else
+#   error what?
+#endif
+
+#define OFX_VISION_VERSION_CHECK_X(MAJOR, MINOR) (MAC_OS_X_VERSION_##MAJOR##_##MINOR <= OFX_VISION_MAC_OS_VERSION_MIN_REQUIRED)
+#define OFX_VISION_VERSION_CHECK(MAJOR, MINOR) (MAC_OS_VERSION_##MAJOR##_##MINOR <= OFX_VISION_MAC_OS_VERSION_MIN_REQUIRED)
+
 namespace ofx {
     namespace Vision {
         std::shared_ptr<ofImage> pixelBufferToOfImage(CVPixelBufferRef pixelBuffer);

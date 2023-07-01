@@ -11,6 +11,8 @@
 
 #include "ofLog.h"
 
+#if OFX_VISION_VERSION_CHECK(11, 0)
+
 namespace ofx {
     namespace Vision {
         using TargetRequest = DetectHumanBodyPose;
@@ -59,3 +61,5 @@ namespace ofx {
         }
     }; // namespace Vision
 }; // namespace ofx
+
+#endif

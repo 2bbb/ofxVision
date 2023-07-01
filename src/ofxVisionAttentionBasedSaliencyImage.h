@@ -6,6 +6,8 @@
 
 #include "ofxVisionBase.h"
 
+#if OFX_VISION_VERSION_CHECK_X(10, 15)
+
 #include "ofImage.h"
 #include "ofVectorMath.h"
 
@@ -37,3 +39,7 @@ namespace ofx {
 }; // namespace ofx
 
 using ofxVisionAttentionBasedSaliencyImage = ofx::Vision::AttentionBasedSaliencyImage;
+
+#else
+#   warning ofxVisionAttentionBasedSaliencyImage need macOS 10.15~
+#endif
