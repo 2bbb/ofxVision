@@ -1,6 +1,5 @@
 //
 //  ofxVisionObservation.h
-//  example
 //
 //  Created by 2bit on 2023/06/30.
 //
@@ -13,6 +12,9 @@
 #include "ofImage.h"
 
 #include <memory>
+#include <array>
+#include <vector>
+#include <string>
 
 namespace ofx {
     namespace Vision {
@@ -29,11 +31,11 @@ namespace ofx {
                 std::shared_ptr<ofFloatImage> pixels;
                 std::string featureName;
             };
-            struct Object : Base {
+            struct DetectedObject : Base {
                 ofRectangle boundingBox;
                 FloatPixelBuffer segmentationMask;
             };
-            struct Rectangle : Object {
+            struct Rectangle : DetectedObject {
                 glm::vec2 topLeft;
                 glm::vec2 topRight;
                 glm::vec2 bottomRight;
@@ -191,6 +193,86 @@ namespace ofx {
                     }
                     std::size_t size() const { return 2; }
                 } legs;
+            }; // struct BodyPose
+            
+            using IndexPath = std::vector<std::size_t>;
+            
+            struct Contour {
+                float aspectRatio;
+                IndexPath indexPath;
+                std::vector<glm::vec2> normalizedPoints;
+                std::vector<std::shared_ptr<Contour>> childContours;
+            };
+            
+            struct Contours : Base {
+                std::size_t contourCount;
+                std::vector<std::shared_ptr<Contour>> topLevelContours;
+            }; // struct Contours
+            
+            enum class PointsClassification {
+                Disconnected,
+                OpenPath,
+                ClosedPath,
+                NotImplemented
+            };
+            
+            struct FaceLandmarks {
+                float confidence{-1.0f};
+            };
+            
+            struct FaceLandmarkRegion2D {
+                PointsClassification pointsClassification;
+                std::vector<glm::vec2> normalizedPoints;
+            };
+            
+            struct FaceLandmarks2D : FaceLandmarks {
+                FaceLandmarkRegion2D allPoints;
+                FaceLandmarkRegion2D faceContour;
+                
+                FaceLandmarkRegion2D leftEye;
+                FaceLandmarkRegion2D leftEyebrow;
+                FaceLandmarkRegion2D leftPupil;
+
+                FaceLandmarkRegion2D rightEye;
+                FaceLandmarkRegion2D rightEyebrow;
+                FaceLandmarkRegion2D rightPupil;
+                
+                FaceLandmarkRegion2D nose;
+                FaceLandmarkRegion2D noseCrest;
+                
+                FaceLandmarkRegion2D medianLine;
+                FaceLandmarkRegion2D outerLips;
+                FaceLandmarkRegion2D innerLips;
+                const FaceLandmarkRegion2D &operator[](std::size_t n) const {
+                    static FaceLandmarkRegion2D dummy;
+                    switch(n) {
+                        case 0: return allPoints;
+                        case 1: return faceContour;
+                        case 2: return leftEye;
+                        case 3: return leftEyebrow;
+                        case 4: return leftPupil;
+                        case 5: return rightEye;
+                        case 6: return rightEyebrow;
+                        case 7: return rightPupil;
+                        case 8: return nose;
+                        case 9: return noseCrest;
+                        case 10: return medianLine;
+                        case 11: return outerLips;
+                        case 12: return innerLips;
+                        default: return dummy;
+                    }
+                }
+                std::size_t size() const { return 13; };
+            };
+            
+            struct Face : DetectedObject {
+                FaceLandmarks2D landmarks;
+                
+                float roll;
+                float pitch;
+                float yaw;
+                
+                float faceCaptureQuality;
             };
         }
     };

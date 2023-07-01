@@ -20,36 +20,65 @@ class ofApp : public ofBaseApp {
     RequestAndObservation<ofxVisionDetectHumanHandPose> handpose;
     RequestAndObservation<ofxVisionDetectHumanBodyPose> bodypose;
     RequestAndObservation<ofxVisionGenerateOpticalFlow> optical;
-    
+    RequestAndObservation<ofxVisionDetectContours> contours;
+    RequestAndObservation<ofxVisionDetectRectangles> rectangles;
+    RequestAndObservation<ofxVisionDetectFaceLandmarks> face_landmarks;
+
     ofShader opticalShader;
     
-    int mode = 0;
+    const int num_mode = 9;
+    int mode = num_mode - 1;
 public:
 	void setup() {
         grabber.setDeviceID(1);
         grabber.setup(1280, 720);
+        
         person.setup();
         att_saliency.setup();
         obj_saliency.setup();
-        
+        contours.setup();
+        rectangles.setup();
+        face_landmarks.setup();
         optical.setup();
         opticalShader.load("shaders/optical");
         
         handpose.setup(16ul);
         bodypose.setup();
         ofEnableAlphaBlending();
+        ofSetBackgroundColor(0);
 	}
     void update() {
         ofSetWindowTitle(ofToString(ofGetFrameRate(), 3));
         grabber.update();
         if(grabber.isFrameNew()) {
-            person.detect(grabber);
-            att_saliency.detect(grabber);
-            obj_saliency.detect(grabber);
-            handpose.detect(grabber);
-            bodypose.detect(grabber);
-            if(prev.isAllocated()) {
-                optical.detect(prev, grabber);
+            switch(mode) {
+                case 0:
+                    person.detect(grabber);
+                    break;
+                case 1:
+                    att_saliency.detect(grabber);
+                    break;
+                case 2:
+                    obj_saliency.detect(grabber);
+                    break;
+                case 3:
+                    handpose.detect(grabber);
+                    break;
+                case 4:
+                    bodypose.detect(grabber);
+                    break;
+                case 5:
+                    contours.detect(grabber);
+                    break;
+                case 6:
+                    if(prev.isAllocated()) optical.detect(prev, grabber);
+                    break;
+                case 7:
+                    rectangles.detect(grabber);
+                    break;
+                case 8:
+                    face_landmarks.detect(grabber);
+                    break;
             }
             prev.setFromPixels(grabber.getPixels());
         }
@@ -179,26 +208,124 @@ public:
         }
     } // void drawHandTracking()
 
+    void drawContour(std::shared_ptr<ofxVision::Observation::Contour> contour) {
+        ofMesh mesh;
+        mesh.setMode(OF_PRIMITIVE_LINE_STRIP);
+        for(const auto &p : contour->normalizedPoints) {
+            mesh.addVertex({p.x, p.y, 0.0f});
+        }
+        mesh.draw();
+        for(auto child : contour->childContours) {
+            drawContour(child);
+        }
+    }
     
+    void drawContours() {
+        ofPushMatrix();
+        ofScale(ofGetWidth(), ofGetHeight());
+        ofSetColor(255, 0, 0);
+        const auto &contours = this->contours.result;
+        for(auto contour : contours.topLevelContours) {
+            drawContour(contour);
+        }
+        ofPopMatrix();
+    } // void drawContours()
+    
+    void drawRectangles() {
+        ofPushMatrix();
+        ofScale(ofGetWidth(), ofGetHeight());
+        const auto &rectangles = this->rectangles.result;
+        ofSetColor(255, 0, 0);
+        for(const auto &rect : rectangles) {
+            ofDrawLine(rect.topLeft, rect.topRight);
+            ofDrawLine(rect.topRight, rect.bottomRight);
+            ofDrawLine(rect.bottomRight, rect.bottomLeft);
+            ofDrawLine(rect.bottomLeft, rect.topLeft);
+        }
+        ofPopMatrix();
+    } // void drawRectangles()
+        
+        
+    void drawLandmarksRegion(const ofxVision::Observation::FaceLandmarkRegion2D &landmark,
+                             glm::vec2 scale,
+                             float size)
+    {
+        for(const auto &p : landmark.normalizedPoints) {
+            ofDrawCircle(p * scale, size);
+        }
+    }
+    void drawFaceLandmarks() {
+        const auto &faces = face_landmarks.result;
+        auto w = ofGetWidth();
+        auto h = ofGetHeight();
+        for(auto &face : faces) {
+            ofPushMatrix();
+            const auto scale = glm::vec2{face.boundingBox.width * w, face.boundingBox.height * h};
+            ofTranslate(face.boundingBox.x * w, face.boundingBox.y * h);
+            ofSetColor(255, 0, 0);
+            for(auto i = 1ul; i < face.landmarks.size(); ++i) {
+                const auto &landmarks = face.landmarks[i];
+                drawLandmarksRegion(landmarks, scale, 5.0f);
+            }
+            ofPopMatrix();
+        }
+    } // void drawFaceLandmarks()
 	void draw() {
         const glm::vec2 s = { ofGetWidth(), ofGetHeight() };
         ofSetColor(255, 255, 255);
         grabber.draw(0, 0, ofGetWidth(), ofGetHeight());
         
-//        drawOpticalFlow();
-//        drawPersonSegmentation();
-//        
-//        drawAttentionSaliency();
-//        drawObjectnessSaliency();
-//        
-        drawHandTracking();
-        drawBodyTracking();
+        switch(mode) {
+            case 0:
+                drawPersonSegmentation();
+                ofDrawBitmapStringHighlight("person segmentation", 20, 20);
+                break;
+            case 1:
+                drawAttentionSaliency();
+                ofDrawBitmapStringHighlight("attention based saliency", 20, 20);
+                break;
+            case 2:
+                drawObjectnessSaliency();
+                ofDrawBitmapStringHighlight("objectness based saliency", 20, 20);
+                break;
+            case 3:
+                drawHandTracking();
+                ofDrawBitmapStringHighlight("hand pose detection", 20, 20);
+                break;
+            case 4:
+                drawBodyTracking();
+                ofDrawBitmapStringHighlight("body pose detection", 20, 20);
+                break;
+            case 5:
+                drawContours();
+                ofDrawBitmapStringHighlight("contours detection", 20, 20);
+                break;
+            case 6:
+                drawOpticalFlow();
+                ofDrawBitmapStringHighlight("optical flow", 20, 20);
+                break;
+            case 7:
+                drawRectangles();
+                ofDrawBitmapStringHighlight("rectangles detection", 20, 20);
+                break;
+            case 8:
+                drawFaceLandmarks();
+                ofDrawBitmapStringHighlight("face landmark detection", 20, 20);
+                break;
+        }
+
 	}
 
 	void keyPressed(int key) {
         switch(key) {
             case 'R':
                 opticalShader.load("shaders/optical");
+                break;
+            case OF_KEY_LEFT:
+                mode = (mode + num_mode - 1) % num_mode;
+                break;
+            case OF_KEY_RIGHT:
+                mode = (mode + 1) % num_mode;
                 break;
             default: break;
         }

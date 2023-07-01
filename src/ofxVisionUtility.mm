@@ -111,6 +111,7 @@ namespace ofx {
                                                 renderingIntent);
             
             CGDataProviderRelease(dataProviderRef);
+            OFX_VISION_CFAUTORELEASE(imageRef);
             return imageRef;
         }
     }; // namespace Vision

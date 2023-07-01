@@ -24,9 +24,12 @@ namespace ofx {
         
         CGImageRef ofBaseHasPixelsToCGImageRef(const ofBaseHasPixels &pix);
         namespace {
-            glm::vec2 toOF(CGPoint p) { return { p.x, p.y }; }
+            glm::vec2 toOF(CGPoint p) { return { p.x, 1.0f - p.y }; }
             ofRectangle toOF(CGRect r) {
-                return ofRectangle(r.origin.x, r.origin.y, r.size.width, r.size.height);
+                return ofRectangle(r.origin.x,
+                                   1.0f - r.origin.y - r.size.height,
+                                   r.size.width,
+                                   r.size.height);
             };
         };
     }; // namespace Vision
