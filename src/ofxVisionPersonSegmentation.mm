@@ -28,20 +28,21 @@ namespace ofx {
         }
         
         namespace {
-            VNGeneratePersonSegmentationRequest *createRequest(PersonSegmentation::QualityLevel qualityLevel) {
-                VNGeneratePersonSegmentationRequest *request = [[VNGeneratePersonSegmentationRequest alloc] init];
-                request.qualityLevel = conv(qualityLevel);
+            Request *createRequest(const PersonSegmentation::Settings &settings)
+            {
+                auto request = [[Request alloc] init];
+                request.qualityLevel = conv(settings.qualityLevel);
                 request.outputPixelFormat = kCVPixelFormatType_OneComponent8;
                 OFX_VISION_AUTORELEASE(request);
                 return request;
             }
             
             TargetRequest::ResultType detectWithCIImage(void *handler_impl,
-                                                        PersonSegmentation::QualityLevel qualityLevel,
+                                                        const PersonSegmentation::Settings &settings,
                                                         CIImage *image)
             {
                 VNSequenceRequestHandler *handler = (VNSequenceRequestHandler *)handler_impl;
-                VNGeneratePersonSegmentationRequest *request = createRequest(qualityLevel);
+                VNGeneratePersonSegmentationRequest *request = createRequest(settings);
                 NSError *err = nil;
                 [handler performRequests:@[request]
                                onCIImage:image
@@ -56,17 +57,14 @@ namespace ofx {
             }
         };
         
-        TargetRequest::ResultType TargetRequest::detect(const ofBaseHasPixels &pix) {
-            CGImageRef cgImage = ofBaseHasPixelsToCGImageRef(pix);
-            return detectWithCIImage(handler_impl, qualityLevel, [CIImage imageWithCGImage:cgImage]);
-        }
+#include "details/detect_impl.inl"
+
+        Request *TargetRequest::createRequest() const
+        { return ofx::Vision::createRequest(settings); }
         
-        TargetRequest::ResultType TargetRequest::detect(IOSurfaceRef surface) {
-            return detectWithCIImage(handler_impl, qualityLevel, [CIImage imageWithIOSurface:surface]);
-        }
-        
-        TargetRequest::ResultType TargetRequest::detect(CVPixelBufferRef pix) {
-            return detectWithCIImage(handler_impl, qualityLevel, [CIImage imageWithCVPixelBuffer:pix]);
+        TargetRequest::ResultType TargetRequest::createResult(Request *request) const {
+            CVPixelBufferRef pixelBuffer = request.results.firstObject.pixelBuffer;
+            return pixelBufferToOfImage(pixelBuffer);
         }
     }; // namespace Vision
 }; // namespace ofx

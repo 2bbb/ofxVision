@@ -14,18 +14,22 @@
 
 namespace ofx {
     namespace Vision {
-        using RequestObject = AttentionBasedSaliencyImage;
+        using TargetRequest = AttentionBasedSaliencyImage;
         
         namespace {
-            VNGenerateAttentionBasedSaliencyImageRequest *createRequest() {
-                VNGenerateAttentionBasedSaliencyImageRequest *request = [[VNGenerateAttentionBasedSaliencyImageRequest alloc] init];
+            Request *createRequest(const TargetRequest::Settings &settings)
+            {
+                auto request = [[VNGenerateAttentionBasedSaliencyImageRequest alloc] init];
                 OFX_VISION_AUTORELEASE(request);
                 return request;
             }
             
-            RequestObject::ResultType detectWithCIImage(void *handler_impl, CIImage *image) {
-                VNSequenceRequestHandler *handler = (VNSequenceRequestHandler *)handler_impl;
-                auto request = createRequest();
+            TargetRequest::ResultType detectWithCIImage(void *handler_impl,
+                                                       const TargetRequest::Settings &settings,
+                                                       CIImage *image)
+            {
+                auto handler = (VNSequenceRequestHandler *)handler_impl;
+                auto request = createRequest(settings);
                 
                 NSError *err = nil;
                 [handler performRequests:@[request]
@@ -42,18 +46,13 @@ namespace ofx {
             }
         };
         
-        RequestObject::ResultType RequestObject::detect(const ofBaseHasPixels &pix) {
-            CGImageRef cgImage = ofBaseHasPixelsToCGImageRef(pix);
-            return detectWithCIImage(handler_impl, [CIImage imageWithCGImage:cgImage]);
-        }
+#include "details/detect_impl.inl"
         
-        RequestObject::ResultType RequestObject::detect(IOSurfaceRef surface) {
-            return detectWithCIImage(handler_impl, [CIImage imageWithIOSurface:surface]);
-        }
+        Request *TargetRequest::createRequest() const
+        { return ofx::Vision::createRequest(settings); }
         
-        RequestObject::ResultType RequestObject::detect(CVPixelBufferRef pix) {
-            return detectWithCIImage(handler_impl, [CIImage imageWithCVPixelBuffer:pix]);
-        }
+        TargetRequest::ResultType TargetRequest::createResult(Request *request) const
+        { return toOF(request.results.firstObject); }
     }; // namespace Vision
 }; // namespace ofx
 

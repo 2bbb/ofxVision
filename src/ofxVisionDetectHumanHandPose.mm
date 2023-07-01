@@ -16,19 +16,20 @@ namespace ofx {
         using TargetRequest = DetectHumanHandPose;
         
         namespace {
-            VNDetectHumanHandPoseRequest *createRequest(std::size_t maximumHandCount) {
+            VNDetectHumanHandPoseRequest *createRequest(const TargetRequest::Settings &settings)
+            {
                 VNDetectHumanHandPoseRequest *request = [[VNDetectHumanHandPoseRequest alloc] init];
-                request.maximumHandCount = maximumHandCount;
+                request.maximumHandCount = settings.maximumHandCount;
                 OFX_VISION_AUTORELEASE(request);
                 return request;
             }
             
             TargetRequest::ResultType detectWithCIImage(void *handler_impl,
-                                                        std::size_t maximumHandCount,
+                                                        const TargetRequest::Settings &settings,
                                                         CIImage *image)
             {
                 auto handler = (VNSequenceRequestHandler *)handler_impl;
-                auto request = createRequest(maximumHandCount);
+                auto request = createRequest(settings);
                 NSError *err = nil;
                 [handler performRequests:@[request]
                                onCIImage:image
@@ -46,17 +47,17 @@ namespace ofx {
             }
         };
         
-        TargetRequest::ResultType TargetRequest::detect(const ofBaseHasPixels &pix) {
-            CGImageRef cgImage = ofBaseHasPixelsToCGImageRef(pix);
-            return detectWithCIImage(handler_impl, maximumHandCount, [CIImage imageWithCGImage:cgImage]);
-        }
+#include "details/detect_impl.inl"
+
+        Request *TargetRequest::createRequest() const
+        { return ofx::Vision::createRequest(settings); }
         
-        TargetRequest::ResultType TargetRequest::detect(IOSurfaceRef surface) {
-            return detectWithCIImage(handler_impl, maximumHandCount, [CIImage imageWithIOSurface:surface]);
-        }
-        
-        TargetRequest::ResultType TargetRequest::detect(CVPixelBufferRef pix) {
-            return detectWithCIImage(handler_impl, maximumHandCount, [CIImage imageWithCVPixelBuffer:pix]);
+        TargetRequest::ResultType TargetRequest::createResult(Request *request) const {
+            TargetRequest::ResultType results;
+            for(VNHumanHandPoseObservation *hand in request.results) {
+                results.push_back(toOF(hand));
+            }
+            return results;
         }
     }; // namespace Vision
 }; // namespace ofx

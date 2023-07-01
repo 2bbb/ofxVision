@@ -7,6 +7,16 @@
 
 #include "ofxVisionBase.h"
 
+#ifdef Request
+#   undef Request
+#endif
+
+#if __OBJC__
+#   define Request VNDetectRectanglesRequest
+#else
+#   define Request void
+#endif
+
 namespace ofx {
     namespace Vision {
         struct DetectRectangles : Base {
@@ -19,10 +29,6 @@ namespace ofx {
                 float minimumConfidence{0.0f}; // 0.0 - 1.0
                 std::size_t maximumObservations{0ul};
             };
-            
-            ResultType detect(const ofBaseHasPixels &pix);
-            ResultType detect(IOSurfaceRef surace);
-            ResultType detect(CVPixelBufferRef pix);
             
             void setMinimumAspectRatio(float v) {
                 settings.minimumAspectRatio = ofClamp(v, 0.0f, 1.0f);
@@ -60,7 +66,10 @@ namespace ofx {
             std::size_t getMaximumObservations() const
             { return settings.maximumObservations; };
 
+#include "details/detect_header.inl"
+            
         protected:
+#include "details/create_req_res_header.inl"
             Settings settings;
         };
     }; // namespace Vision

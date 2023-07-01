@@ -31,38 +31,27 @@ namespace ofx {
         }
         
         namespace {
-            VNGenerateOpticalFlowRequest *createRequest(CIImage *image,
-                                                        GenerateOpticalFlow::ComputationAccuracyLevel accuracyLevel)
+            Request *createRequest(const TargetRequest::Settings &settings)
             {
-                VNGenerateOpticalFlowRequest *request = [[VNGenerateOpticalFlowRequest alloc] initWithTargetedCIImage:image
+                auto request = [[VNGenerateOpticalFlowRequest alloc] initWithTargetedCIImage:(CIImage *)settings.baseImage
                                                                                                               options:@{}];
-                request.computationAccuracy = conv(accuracyLevel);
-//                request.outputPixelFormat = kCVPixelFormatType_OneComponent32Float;
+                request.computationAccuracy = conv(settings.accuracyLevel);
                 OFX_VISION_AUTORELEASE(request);
                 return request;
             }
             
             TargetRequest::ResultType detectWithCIImage(void *handler_impl,
-                                                        GenerateOpticalFlow::ComputationAccuracyLevel accuracyLevel,
-                                                        CIImage *base_image,
+                                                        const TargetRequest::Settings &settings,
                                                         CIImage *image)
             {
                 auto handler = (VNSequenceRequestHandler *)handler_impl;
-                auto request = createRequest(image, accuracyLevel);
+                auto request = createRequest(settings);
                 
                 NSError *err = nil;
                 auto res = [handler performRequests:@[ request ]
-                                          onCIImage:base_image
+                                          onCIImage:image
                                         orientation:kCGImagePropertyOrientationUp
                                               error:&err];
-                if(!res) {
-                    if(err) {
-                        ofLogError("ofxGenerateOpticalFlow") << err.description.UTF8String;
-                    } else {
-                        ofLogError("ofxGenerateOpticalFlow") << "unknown error...";
-                    }
-                    return {};
-                }
                 if(err) {
                     ofLogError("ofxGenerateOpticalFlow") << err.description.UTF8String;
                     return {};
@@ -76,32 +65,35 @@ namespace ofx {
             }
         };
         
-        GenerateOpticalFlow::ResultType TargetRequest::detect(const ofBaseHasPixels &base,
-                                                              const ofBaseHasPixels &pix)
-        {
-            CGImageRef cgImage = ofBaseHasPixelsToCGImageRef(pix);
-            return detectWithCIImage(handler_impl,
-                                     accuracyLevel,
-                                     toCIImage(base),
-                                     [CIImage imageWithCGImage:cgImage]);
+#include "details/detect_impl.inl"
+
+        void TargetRequest::releaseImage() {
+            CIImage *baseImage = (CIImage *)settings.baseImage;
+            if(settings.baseImage) OFX_VISION_RELEASE(baseImage);
+        }
+        void TargetRequest::setBaseImage(const ofBaseHasPixels &pix) {
+            releaseImage();
+            settings.baseImage = OFX_VISION_RETAIN(toCIImage(pix));
+        }
+        void TargetRequest::setBaseImage(IOSurfaceRef surface) {
+            releaseImage();
+            settings.baseImage = OFX_VISION_RETAIN(toCIImage(surface));
+        }
+        void TargetRequest::setBaseImage(CVPixelBufferRef pix) {
+            releaseImage();
+            settings.baseImage = OFX_VISION_RETAIN(toCIImage(pix));
         }
         
-        GenerateOpticalFlow::ResultType TargetRequest::detect(const ofBaseHasPixels &base,
-                                                              IOSurfaceRef surface)
-        {
-            return detectWithCIImage(handler_impl,
-                                     accuracyLevel,
-                                     toCIImage(base),
-                                     [CIImage imageWithIOSurface:surface]);
-        }
+        Request *TargetRequest::createRequest() const
+        { return ofx::Vision::createRequest(settings); }
         
-        GenerateOpticalFlow::ResultType TargetRequest::detect(const ofBaseHasPixels &base,
-                                                              CVPixelBufferRef pix)
-        {
-            return detectWithCIImage(handler_impl,
-                                     accuracyLevel,
-                                     toCIImage(base),
-                                     [CIImage imageWithCVPixelBuffer:pix]);
+        TargetRequest::ResultType TargetRequest::createResult(Request *request) const {
+            CVPixelBufferRef pixelBuffer = request.results.firstObject.pixelBuffer;
+#if OFX_VISION_USE_TEXTURE
+            return pixelBufferToOfFloatTexture(pixelBuffer);
+#else
+            return pixelBuffer2fToOfFloatImage(pixelBuffer);
+#endif
         }
     }; // namespace Vision
 }; // namespace ofx

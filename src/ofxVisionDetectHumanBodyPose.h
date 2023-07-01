@@ -8,6 +8,16 @@
 
 #include "ofxVisionBase.h"
 
+#ifdef Request
+#   undef Request
+#endif
+
+#if __OBJC__
+#   define Request VNDetectHumanBodyPoseRequest
+#else
+#   define Request void
+#endif
+
 namespace ofx {
     namespace Vision {
         struct DetectHumanBodyPose : Base {
@@ -18,12 +28,13 @@ namespace ofx {
                 Accurate,
             };
             
-            ResultType detect(const ofBaseHasPixels &pix);
-            ResultType detect(IOSurfaceRef surace);
-            ResultType detect(CVPixelBufferRef pix);
+            struct Settings {};
+            
+#include "details/detect_header.inl"
             
         protected:
-            
+#include "details/create_req_res_header.inl"
+            Settings settings;
         };
     }; // namespace Vision
 }; // namespace ofx

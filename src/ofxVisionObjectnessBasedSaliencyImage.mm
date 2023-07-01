@@ -14,44 +14,42 @@
 
 namespace ofx {
     namespace Vision {
-        using RequestObject = ObjectnessBasedSaliencyImage;
+        using TargetRequest = ObjectnessBasedSaliencyImage;
         namespace {
-            VNGenerateObjectnessBasedSaliencyImageRequest *createRequest() {
-                VNGenerateObjectnessBasedSaliencyImageRequest *request = [[VNGenerateObjectnessBasedSaliencyImageRequest alloc] init];
+            Request *createRequest(const TargetRequest::Settings &settings) {
+                auto request = [[VNGenerateObjectnessBasedSaliencyImageRequest alloc] init];
                 OFX_VISION_AUTORELEASE(request);
                 return request;
             }
             
-            RequestObject::ResultType detectWithCIImage(void *handler_impl, CIImage *image) {
+            TargetRequest::ResultType detectWithCIImage(void *handler_impl,
+                                                        const TargetRequest::Settings &settings,
+                                                        CIImage *image)
+            {
                 VNSequenceRequestHandler *handler = (VNSequenceRequestHandler *)handler_impl;
-                auto request = createRequest();
+                auto request = createRequest(settings);
                 
                 NSError *err = nil;
                 [handler performRequests:@[request]
                                onCIImage:image
                              orientation:kCGImagePropertyOrientationUp
                                    error:&err];
-                RequestObject::ResultType result;
+                TargetRequest::ResultType result;
                 if(err) {
-                    ofLogError("AttentionBasedSaliencyImage") << err.description.UTF8String;
+                    ofLogError("ObjectnessBasedSaliencyImage") << err.description.UTF8String;
                     return result;
                 }
-                result = toOF(request.results.firstObject);
-                return result;
+                return toOF(request.results.firstObject);
             }
         };
         
-        RequestObject::ResultType RequestObject::detect(const ofBaseHasPixels &pix) {
-            CGImageRef cgImage = ofBaseHasPixelsToCGImageRef(pix);
-            return detectWithCIImage(handler_impl, [CIImage imageWithCGImage:cgImage]);
-        }
+#include "details/detect_impl.inl"
+
+        Request *TargetRequest::createRequest() const
+        { return ofx::Vision::createRequest(settings); }
         
-        RequestObject::ResultType RequestObject::detect(IOSurfaceRef surface) {
-            return detectWithCIImage(handler_impl, [CIImage imageWithIOSurface:surface]);
-        }
-        
-        RequestObject::ResultType RequestObject::detect(CVPixelBufferRef pix) {
-            return detectWithCIImage(handler_impl, [CIImage imageWithCVPixelBuffer:pix]);
+        TargetRequest::ResultType TargetRequest::createResult(Request *request) const {
+            return toOF(request.results.firstObject);
         }
     }; // namespace Vision
 }; // namespace ofx

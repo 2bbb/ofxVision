@@ -8,6 +8,16 @@
 
 #include "ofxVisionBase.h"
 
+#ifdef Request
+#   undef Request
+#endif
+
+#if __OBJC__
+#   define Request VNDetectContoursRequest
+#else
+#   define Request void
+#endif
+
 namespace ofx {
     namespace Vision {
         struct DetectContours : Base {
@@ -17,10 +27,6 @@ namespace ofx {
                 float contrastPivot{0.5}; // 0.0 - 1.0, nil (automatically)
                 bool detectsDarkOnLight{true};
             };
-            
-            ResultType detect(const ofBaseHasPixels &pix);
-            ResultType detect(IOSurfaceRef surace);
-            ResultType detect(CVPixelBufferRef pix);
             
             void setContrastAdjustment(float adjustment) {
                 settings.contrastAdjustment = ofClamp(adjustment, 0.0f, 3.0f);
@@ -39,7 +45,10 @@ namespace ofx {
             bool getDetectsDarkOnLight() const
             { return settings.detectsDarkOnLight; }
 
+#include "details/detect_header.inl"
+            
         protected:
+#include "details/create_req_res_header.inl"
             Settings settings;
         };
     }; // namespace Vision

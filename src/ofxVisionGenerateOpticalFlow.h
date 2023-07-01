@@ -6,6 +6,16 @@
 
 #include "ofxVisionBase.h"
 
+#ifdef Request
+#   undef Request
+#endif
+
+#if __OBJC__
+#   define Request VNGenerateOpticalFlowRequest
+#else
+#   define Request void
+#endif
+
 #define OFX_VISION_USE_TEXTURE 1
 
 namespace ofx {
@@ -23,25 +33,32 @@ namespace ofx {
                 VeryHigh
             };
             
+            struct Settings {
+                ComputationAccuracyLevel accuracyLevel{ComputationAccuracyLevel::Medium};
+                void *baseImage{nullptr};
+            };
+            
             void setup(ComputationAccuracyLevel accuracyLevel = ComputationAccuracyLevel::Medium)
             {
                 Base::setup();
-                this->accuracyLevel = accuracyLevel;
+                settings.accuracyLevel = accuracyLevel;
             }
-            ResultType detect(const ofBaseHasPixels &base,
-                              const ofBaseHasPixels &pix);
-            ResultType detect(const ofBaseHasPixels &base,
-                              IOSurfaceRef surace);
-            ResultType detect(const ofBaseHasPixels &base,
-                              CVPixelBufferRef pix);
             
             ComputationAccuracyLevel getAccuracyLevel() const
-            { return accuracyLevel; };
+            { return settings.accuracyLevel; };
             void setAccuracyLevel(ComputationAccuracyLevel level)
-            { accuracyLevel = level; };
+            { settings.accuracyLevel = level; };
+            
+            void setBaseImage(const ofBaseHasPixels &pix);
+            void setBaseImage(IOSurfaceRef surface);
+            void setBaseImage(CVPixelBufferRef pix);
 
+#include "details/detect_header.inl"
+            
         protected:
-            ComputationAccuracyLevel accuracyLevel{ComputationAccuracyLevel::Medium};
+#include "details/create_req_res_header.inl"
+            void releaseImage();
+            Settings settings;
         };
     }; // namespace Vision
 }; // namespace ofx

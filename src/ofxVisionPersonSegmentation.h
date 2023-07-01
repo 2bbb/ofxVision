@@ -8,6 +8,16 @@
 
 #include "ofxVisionBase.h"
 
+#ifdef Request
+#   undef Request
+#endif
+
+#if __OBJC__
+#   define Request VNGeneratePersonSegmentationRequest
+#else
+#   define Request void
+#endif
+
 namespace ofx {
     namespace Vision {
         struct PersonSegmentation : Base {
@@ -18,21 +28,25 @@ namespace ofx {
                 Accurate,
             };
             
+            struct Settings {
+                QualityLevel qualityLevel{QualityLevel::Fast};
+            };
+            
             void setup(QualityLevel qualityLevel = QualityLevel::Fast) {
                 Base::setup();
-                this->qualityLevel = qualityLevel;
+                settings.qualityLevel = qualityLevel;
             }
-            ResultType detect(const ofBaseHasPixels &pix);
-            ResultType detect(IOSurfaceRef surace);
-            ResultType detect(CVPixelBufferRef pix);
             
             QualityLevel getQualityLevel() const
-            { return qualityLevel; };
+            { return settings.qualityLevel; };
             void setQualityLevel(QualityLevel level)
-            { qualityLevel = level; };
+            { settings.qualityLevel = level; };
 
+#include "details/detect_header.inl"
+            
         protected:
-            QualityLevel qualityLevel{QualityLevel::Fast};
+#include "details/create_req_res_header.inl"
+            Settings settings;
         };
     }; // namespace Vision
 }; // namespace ofx

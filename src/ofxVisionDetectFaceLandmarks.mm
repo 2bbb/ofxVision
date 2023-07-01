@@ -16,7 +16,7 @@ namespace ofx {
         using TargetRequest = DetectFaceLandmarks;
         
         namespace {
-            VNDetectFaceLandmarksRequest *createRequest(const TargetRequest::Settings &settings) {
+            Request *createRequest(const TargetRequest::Settings &settings) {
                 auto request = [[VNDetectFaceLandmarksRequest alloc] init];
                 
                 OFX_VISION_AUTORELEASE(request);
@@ -47,17 +47,18 @@ namespace ofx {
             }
         };
         
-        TargetRequest::ResultType TargetRequest::detect(const ofBaseHasPixels &pix) {
-            CGImageRef cgImage = ofBaseHasPixelsToCGImageRef(pix);
-            return detectWithCIImage(handler_impl, settings, [CIImage imageWithCGImage:cgImage]);
-        }
+#include "details/detect_impl.inl"
+
+        Request *TargetRequest::createRequest() const
+        { return ofx::Vision::createRequest(settings); }
         
-        TargetRequest::ResultType TargetRequest::detect(IOSurfaceRef surface) {
-            return detectWithCIImage(handler_impl, settings, [CIImage imageWithIOSurface:surface]);
-        }
-        
-        TargetRequest::ResultType TargetRequest::detect(CVPixelBufferRef pix) {
-            return detectWithCIImage(handler_impl, settings, [CIImage imageWithCVPixelBuffer:pix]);
+        TargetRequest::ResultType TargetRequest::createResult(Request *request) const {
+            TargetRequest::ResultType result;
+            result.resize(request.results.count);
+            for(auto i = 0; i < result.size(); ++i) {
+                result[i] = toOF(request.results[i]);
+            }
+            return result;
         }
     }; // namespace Vision
 }; // namespace ofx

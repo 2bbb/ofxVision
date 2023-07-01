@@ -16,17 +16,18 @@ namespace ofx {
         using TargetRequest = DetectHumanBodyPose;
         
         namespace {
-            VNDetectHumanBodyPoseRequest *createRequest() {
-                VNDetectHumanBodyPoseRequest *request = [[VNDetectHumanBodyPoseRequest alloc] init];
+            Request *createRequest(const TargetRequest::Settings &settings) {
+                auto request = [[VNDetectHumanBodyPoseRequest alloc] init];
                 OFX_VISION_AUTORELEASE(request);
                 return request;
             }
             
             TargetRequest::ResultType detectWithCIImage(void *handler_impl,
+                                                        const TargetRequest::Settings &settings,
                                                         CIImage *image)
             {
                 auto handler = (VNSequenceRequestHandler *)handler_impl;
-                auto request = createRequest();
+                auto request = createRequest(settings);
                 NSError *err = nil;
                 [handler performRequests:@[request]
                                onCIImage:image
@@ -44,17 +45,17 @@ namespace ofx {
             }
         };
         
-        TargetRequest::ResultType TargetRequest::detect(const ofBaseHasPixels &pix) {
-            CGImageRef cgImage = ofBaseHasPixelsToCGImageRef(pix);
-            return detectWithCIImage(handler_impl, [CIImage imageWithCGImage:cgImage]);
-        }
+#include "details/detect_impl.inl"
+
+        Request *TargetRequest::createRequest() const
+        { return ofx::Vision::createRequest(settings); }
         
-        TargetRequest::ResultType TargetRequest::detect(IOSurfaceRef surface) {
-            return detectWithCIImage(handler_impl, [CIImage imageWithIOSurface:surface]);
-        }
-        
-        TargetRequest::ResultType TargetRequest::detect(CVPixelBufferRef pix) {
-            return detectWithCIImage(handler_impl, [CIImage imageWithCVPixelBuffer:pix]);
+        TargetRequest::ResultType TargetRequest::createResult(Request *request) const {
+            TargetRequest::ResultType results;
+            for(VNHumanBodyPoseObservation *body in request.results) {
+                results.push_back(toOF(body));
+            }
+            return results;
         }
     }; // namespace Vision
 }; // namespace ofx

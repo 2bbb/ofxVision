@@ -8,6 +8,16 @@
 
 #include "ofxVisionBase.h"
 
+#ifdef Request
+#   undef Request
+#endif
+
+#if __OBJC__
+#   define Request VNDetectHumanHandPoseRequest
+#else
+#   define Request void
+#endif
+
 namespace ofx {
     namespace Vision {
         struct DetectHumanHandPose : Base {
@@ -18,21 +28,25 @@ namespace ofx {
                 Accurate,
             };
             
+            struct Settings {
+                std::size_t maximumHandCount{2ul};
+            };
+            
             void setup(std::size_t maximumHandCount = 2ul) {
                 Base::setup();
-                this->maximumHandCount = maximumHandCount;
+                settings.maximumHandCount = maximumHandCount;
             }
-            ResultType detect(const ofBaseHasPixels &pix);
-            ResultType detect(IOSurfaceRef surace);
-            ResultType detect(CVPixelBufferRef pix);
             
             std::size_t getMaximumHandCount() const
-            { return maximumHandCount; };
+            { return settings.maximumHandCount; };
             void setMaximumHandCount(std::size_t count)
-            { maximumHandCount = count; };
+            { settings.maximumHandCount = count; };
 
+#include "details/detect_header.inl"
+            
         protected:
-            std::size_t maximumHandCount{2ul};
+#include "details/create_req_res_header.inl"
+            Settings settings;
         };
     }; // namespace Vision
 }; // namespace ofx

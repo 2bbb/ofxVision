@@ -16,8 +16,8 @@ namespace ofx {
         using TargetRequest = DetectContours;
         
         namespace {
-            VNDetectContoursRequest *createRequest(const TargetRequest::Settings &settings) {
-                VNDetectContoursRequest *request = [[VNDetectContoursRequest alloc] init];
+            Request *createRequest(const TargetRequest::Settings &settings) {
+                auto request = [[VNDetectContoursRequest alloc] init];
                 request.contrastAdjustment = settings.contrastAdjustment;
                 request.contrastPivot = settings.contrastPivot < 0.0f ? nil : @(settings.contrastPivot);
                 request.detectsDarkOnLight = settings.detectsDarkOnLight;
@@ -46,17 +46,15 @@ namespace ofx {
             }
         };
         
-        TargetRequest::ResultType TargetRequest::detect(const ofBaseHasPixels &pix) {
-            CGImageRef cgImage = ofBaseHasPixelsToCGImageRef(pix);
-            return detectWithCIImage(handler_impl, settings, [CIImage imageWithCGImage:cgImage]);
-        }
+#include "details/detect_impl.inl"
+
+        Request *TargetRequest::createRequest() const
+        { return ofx::Vision::createRequest(settings); }
         
-        TargetRequest::ResultType TargetRequest::detect(IOSurfaceRef surface) {
-            return detectWithCIImage(handler_impl, settings, [CIImage imageWithIOSurface:surface]);
-        }
-        
-        TargetRequest::ResultType TargetRequest::detect(CVPixelBufferRef pix) {
-            return detectWithCIImage(handler_impl, settings, [CIImage imageWithCVPixelBuffer:pix]);
+        TargetRequest::ResultType TargetRequest::createResult(Request *request) const {
+            TargetRequest::ResultType result;
+            if(request.results.firstObject) result = toOF(request.results.firstObject);
+            return result;
         }
     }; // namespace Vision
 }; // namespace ofx

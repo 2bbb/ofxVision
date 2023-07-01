@@ -7,6 +7,16 @@
 
 #include "ofxVisionBase.h"
 
+#ifdef Request
+#   undef Request
+#endif
+
+#if __OBJC__
+#   define Request VNDetectFaceLandmarksRequest
+#else
+#   define Request void
+#endif
+
 namespace ofx {
     namespace Vision {
         struct DetectFaceLandmarks : Base {
@@ -16,10 +26,10 @@ namespace ofx {
                 
             };
             
-            ResultType detect(const ofBaseHasPixels &pix);
-            ResultType detect(IOSurfaceRef surace);
-            ResultType detect(CVPixelBufferRef pix);
+#include "details/detect_header.inl"
+            
         protected:
+#include "details/create_req_res_header.inl"
             Settings settings;
         };
     }; // namespace Vision

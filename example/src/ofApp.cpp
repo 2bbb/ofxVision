@@ -71,7 +71,10 @@ public:
                     contours.detect(grabber);
                     break;
                 case 6:
-                    if(prev.isAllocated()) optical.detect(prev, grabber);
+                    if(prev.isAllocated()) {
+                        if(ofGetFrameNum() % 6 == 0) optical.setBaseImage(prev);
+                        optical.detect(grabber);
+                    }
                     break;
                 case 7:
                     rectangles.detect(grabber);
