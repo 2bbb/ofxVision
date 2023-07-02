@@ -47,8 +47,6 @@ namespace ofx {
             return createResult(request);
         }
         
-#include "details/detect_impl.inl"
-
         void Target::releaseImage() {
             CIImage *baseImage = (CIImage *)settings.baseImage;
             if(settings.baseImage) OFX_VISION_RELEASE((CIImage *)baseImage);

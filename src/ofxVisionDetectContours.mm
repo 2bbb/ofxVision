@@ -30,8 +30,6 @@ namespace ofx {
             return createResult(request);
         }
         
-#include "details/detect_impl.inl"
-
         Target::Request *Target::createRequest() const {
             auto request = OFX_VISION_AUTORELEASE([[VNDetectContoursRequest alloc] init]);
             request.contrastAdjustment = settings.contrastAdjustment;

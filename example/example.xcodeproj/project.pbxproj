@@ -14,6 +14,7 @@
 		7A91C6ED62E15C466AE36E8E /* ofxVisionAttentionBasedSaliencyImage.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1F9486C64DE0E097303201D8 /* ofxVisionAttentionBasedSaliencyImage.mm */; };
 		8117A6C5DAC3D25840C6F36C /* ofxVisionDetectRectangles.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8BF1FDD592B06A984CC6DD33 /* ofxVisionDetectRectangles.mm */; };
 		877D2AFF474AAB321BF69E8E /* ofxVisionDetectHumanBodyPose.mm in Sources */ = {isa = PBXBuildFile; fileRef = A0A7D4B3749E290F4EBB8607 /* ofxVisionDetectHumanBodyPose.mm */; };
+		954E92C32A522ACD00D70F8C /* ofxVisionMultipleDetector.mm in Sources */ = {isa = PBXBuildFile; fileRef = 954E92C22A522ACD00D70F8C /* ofxVisionMultipleDetector.mm */; };
 		ADABD316598F5C14F2C53FE5 /* Vision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E3B741D748E4E39080DFF0 /* Vision.framework */; };
 		CBDC9F9107D8B55770177A8E /* ofxVisionUtility.mm in Sources */ = {isa = PBXBuildFile; fileRef = BDB98B5D06665D912ABCED52 /* ofxVisionUtility.mm */; };
 		E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1D0A3A1BDC003C02F2 /* main.cpp */; };
@@ -49,6 +50,8 @@
 		8BF1FDD592B06A984CC6DD33 /* ofxVisionDetectRectangles.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = ofxVisionDetectRectangles.mm; path = ../../ofxVision/src/ofxVisionDetectRectangles.mm; sourceTree = SOURCE_ROOT; };
 		8D9059145F521ED1D7200DE4 /* ofxVisionObjectnessBasedSaliencyImage.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxVisionObjectnessBasedSaliencyImage.h; path = ../../ofxVision/src/ofxVisionObjectnessBasedSaliencyImage.h; sourceTree = SOURCE_ROOT; };
 		954E92C02A52213A00D70F8C /* type_traits.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = type_traits.hpp; path = ../src/details/type_traits.hpp; sourceTree = "<group>"; };
+		954E92C12A522ACD00D70F8C /* ofxVisionMultipleDetector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofxVisionMultipleDetector.h; path = ../src/ofxVisionMultipleDetector.h; sourceTree = "<group>"; };
+		954E92C22A522ACD00D70F8C /* ofxVisionMultipleDetector.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ofxVisionMultipleDetector.mm; path = ../src/ofxVisionMultipleDetector.mm; sourceTree = "<group>"; };
 		957656398AF4DE9CAE70EA49 /* ofxVisionDetectRectangles.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxVisionDetectRectangles.h; path = ../../ofxVision/src/ofxVisionDetectRectangles.h; sourceTree = SOURCE_ROOT; };
 		97CB0764C55EE6236E126631 /* ofxVisionAttentionBasedSaliencyImage.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxVisionAttentionBasedSaliencyImage.h; path = ../../ofxVision/src/ofxVisionAttentionBasedSaliencyImage.h; sourceTree = SOURCE_ROOT; };
 		9E0416ED116AABEEE8CA2852 /* ofxVisionObjCUtility.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxVisionObjCUtility.h; path = ../../ofxVision/src/ofxVisionObjCUtility.h; sourceTree = SOURCE_ROOT; };
@@ -276,6 +279,8 @@
 				248F5D6FC4671529138E85FD /* ofxVision.h */,
 				3CCC9632C8737837D193AE26 /* ofxVisionBase.h */,
 				F498700AC51FB60686DA279F /* ofxVisionBase.mm */,
+				954E92C12A522ACD00D70F8C /* ofxVisionMultipleDetector.h */,
+				954E92C22A522ACD00D70F8C /* ofxVisionMultipleDetector.mm */,
 				3A1B143C44A039F7C4DF11FE /* ofxVisionObservation.h */,
 				220EA72B930486F78F1D18C4 /* ofxVisionUtility.h */,
 				BDB98B5D06665D912ABCED52 /* ofxVisionUtility.mm */,
@@ -753,6 +758,7 @@
 				5F6FCD2A0FDC5F1C7CBA5CA4 /* ofxVisionDetectContours.mm in Sources */,
 				5885C735130D269822F18E0A /* ofxVisionDetectFaceLandmarks.mm in Sources */,
 				877D2AFF474AAB321BF69E8E /* ofxVisionDetectHumanBodyPose.mm in Sources */,
+				954E92C32A522ACD00D70F8C /* ofxVisionMultipleDetector.mm in Sources */,
 				E94FBA4CB73F89BFFE85BB0A /* ofxVisionDetectHumanHandPose.mm in Sources */,
 				8117A6C5DAC3D25840C6F36C /* ofxVisionDetectRectangles.mm in Sources */,
 				E565C7BBBBD6727431DCE818 /* ofxVisionGenerateOpticalFlow.mm in Sources */,

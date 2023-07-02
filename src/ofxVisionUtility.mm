@@ -11,6 +11,14 @@
 
 namespace ofx {
     namespace Vision {
+        void *objc_retain(void *obj) {
+            return OFX_VISION_RETAIN((id)obj);
+        }
+
+        void *objc_release(void *obj) {
+            OFX_VISION_RELEASE((id)obj);
+        }
+
         std::shared_ptr<ofImage> pixelBufferToOfImage(CVPixelBufferRef pixelBuffer) {
             std::shared_ptr<ofImage> result = std::make_shared<ofImage>();
             if(CVPixelBufferLockBaseAddress(pixelBuffer, 0) == kCVReturnSuccess) {

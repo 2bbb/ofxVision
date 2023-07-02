@@ -13,6 +13,8 @@
 
 #include "ofxVisionGenerateOpticalFlow.h"
 
+#include "ofxVisionMultipleDetector.h"
+
 namespace ofxVision = ofx::Vision;
 
 #if !OFX_VISION_VERSION_CHECK_X(10, 13)

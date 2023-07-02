@@ -31,8 +31,6 @@ namespace ofx {
             return createResult(request);
         }
         
-#include "details/detect_impl.inl"
-
         Target::Request *Target::createRequest() const
         {
             auto request = OFX_VISION_AUTORELEASE([[Target::Request alloc] init]);
