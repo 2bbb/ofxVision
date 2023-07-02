@@ -15,8 +15,12 @@ namespace ofx {
             return OFX_VISION_RETAIN((id)obj);
         }
 
-        void *objc_release(void *obj) {
+        void objc_release(void *obj) {
             OFX_VISION_RELEASE((id)obj);
+        }
+
+        void *objc_autorelease(void *obj) {
+            return OFX_VISION_AUTORELEASE((id)obj);
         }
 
         std::shared_ptr<ofImage> pixelBufferToOfImage(CVPixelBufferRef pixelBuffer) {
@@ -122,6 +126,15 @@ namespace ofx {
             OFX_VISION_CFAUTORELEASE(imageRef);
             return imageRef;
         }
+        
+        glm::vec2 toOF(CGPoint p) { return { p.x, 1.0f - p.y }; }
+        ofRectangle toOF(CGRect r) {
+            return ofRectangle(r.origin.x,
+                               1.0f - r.origin.y - r.size.height,
+                               r.size.width,
+                               r.size.height);
+        };
+
         
         ofxVisionCIImage *toCIImage(const ofPixels &pix)
         { return [CIImage imageWithCGImage:ofPixelsToCGImageRef(pix)]; };

@@ -8,7 +8,7 @@
 
 #include "ofxVisionUtility.h"
 
-#include "details/type_traits.hpp"
+#include "details/ofx_vision_index_sequence.hpp"
 
 #include "ofBaseTypes.h"
 

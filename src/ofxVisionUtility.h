@@ -37,8 +37,14 @@
 
 namespace ofx {
     namespace Vision {
+        using ofxVisionCIImage = void;
+        using Handler = OFX_VISION_OBJC_CLASS(VNSequenceRequestHandler);
+        using BaseRequest = OFX_VISION_OBJC_CLASS(VNRequest);
+        using BaseObservation = OFX_VISION_OBJC_CLASS(VNObservation);
+        
         void *objc_retain(void *obj);
-        void *objc_release(void *obj);
+        void objc_release(void *obj);
+        void *objc_autorelease(void *obj);
 
         std::shared_ptr<ofImage> pixelBufferToOfImage(CVPixelBufferRef pixelBuffer);
         std::shared_ptr<ofFloatImage> pixelBufferToOfFloatImage(CVPixelBufferRef pixelBuffer);
@@ -49,21 +55,9 @@ namespace ofx {
         inline CGImageRef ofBaseHasPixelsToCGImageRef(const ofBaseHasPixels &pix) {
             return ofPixelsToCGImageRef(pix.getPixels());
         }
-        namespace {
-            glm::vec2 toOF(CGPoint p) { return { p.x, 1.0f - p.y }; }
-            ofRectangle toOF(CGRect r) {
-                return ofRectangle(r.origin.x,
-                                   1.0f - r.origin.y - r.size.height,
-                                   r.size.width,
-                                   r.size.height);
-            };
-        };
         
-        using ofxVisionCIImage = void;
-        
-        using Handler = OFX_VISION_OBJC_CLASS(VNSequenceRequestHandler);
-        using BaseRequest = OFX_VISION_OBJC_CLASS(VNRequest);
-        using BaseObservation = OFX_VISION_OBJC_CLASS(VNObservation);
+        glm::vec2 toOF(CGPoint p);
+        ofRectangle toOF(CGRect r);
         
         ofxVisionCIImage *toCIImage(const ofPixels &pix);
         ofxVisionCIImage *toCIImage(const ofBaseHasPixels &pix);

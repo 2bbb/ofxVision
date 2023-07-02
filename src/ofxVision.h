@@ -1,17 +1,17 @@
 #pragma once
 
-#include "ofxVisionPersonSegmentation.h"
+#include "./Detectors/ofxVisionPersonSegmentation.h"
 
-#include "ofxVisionDetectHumanHandPose.h"
-#include "ofxVisionDetectHumanBodyPose.h"
-#include "ofxVisionDetectContours.h"
-#include "ofxVisionDetectRectangles.h"
-#include "ofxVisionDetectFaceLandmarks.h"
+#include "./Detectors/ofxVisionDetectHumanHandPose.h"
+#include "./Detectors/ofxVisionDetectHumanBodyPose.h"
+#include "./Detectors/ofxVisionDetectContours.h"
+#include "./Detectors/ofxVisionDetectRectangles.h"
+#include "./Detectors/ofxVisionDetectFaceLandmarks.h"
 
-#include "ofxVisionAttentionBasedSaliencyImage.h"
-#include "ofxVisionObjectnessBasedSaliencyImage.h"
+#include "./Detectors/ofxVisionAttentionBasedSaliencyImage.h"
+#include "./Detectors/ofxVisionObjectnessBasedSaliencyImage.h"
 
-#include "ofxVisionGenerateOpticalFlow.h"
+#include "./Detectors/ofxVisionGenerateOpticalFlow.h"
 
 #include "ofxVisionMultipleDetector.h"
 
