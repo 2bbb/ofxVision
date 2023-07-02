@@ -1,5 +1,5 @@
 //
-//  ofxVisionObjCUtility.m
+//  ofxVisionObjCUtility.mm
 //
 //  Created by 2bit on 2023/07/03.
 //
@@ -309,6 +309,5 @@ namespace ofx {
             return face;
         } // Observation::Face toOF(VNFaceObservation *f)
 #endif
-
     }
 }

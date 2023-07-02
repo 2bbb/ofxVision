@@ -1,5 +1,5 @@
 //
-//  ofxVisionObjC_ARCMacro.h
+//  ofxVisionObjCUtility.h
 //
 //  Created by 2bit on 2023/06/29.
 //

@@ -34,5 +34,5 @@ namespace ofx {
 using ofxVisionDetectFaceLandmarks = ofx::Vision::DetectFaceLandmarks;
 
 #else
-#   error ofxVisionDetectFaceLandmarks need macOS 10.13~
+#   warning ofxVisionDetectFaceLandmarks need macOS 10.13~
 #endif

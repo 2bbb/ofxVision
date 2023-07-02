@@ -75,5 +75,5 @@ namespace ofx {
 using ofxVisionDetectRectangles = ofx::Vision::DetectRectangles;
 
 #else
-#   error ofxVisionDetectRectangles need macOS 10.13~
+#   warning ofxVisionDetectRectangles need macOS 10.13~
 #endif

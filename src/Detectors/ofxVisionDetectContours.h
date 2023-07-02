@@ -53,6 +53,7 @@ namespace ofx {
 }; // namespace ofx
 
 using ofxVisionDetectContours = ofx::Vision::DetectContours;
+
 #else
 #   warning ofxVisionDetectContours need macOS 11.0~
 #endif
