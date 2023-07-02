@@ -10,14 +10,9 @@
 
 #if OFX_VISION_VERSION_CHECK(12, 0)
 
-#ifdef Request
-#   undef Request
-#endif
-
 namespace ofx {
     namespace Vision {
-        struct PersonSegmentation : Base {
-            using ResultType = std::shared_ptr<ofImage>;
+        struct PersonSegmentation : Base<std::shared_ptr<ofImage>> {
             using Request = OFX_VISION_OBJC_CLASS(VNGeneratePersonSegmentationRequest);
 
             enum class QualityLevel {
@@ -40,10 +35,14 @@ namespace ofx {
             void setQualityLevel(QualityLevel level)
             { settings.qualityLevel = level; };
 
-#include "details/detect_header.inl"
-            
         protected:
-#include "details/create_req_res_header.inl"
+            Base::ResultType detectWithCIImage(ofxVisionCIImage *image) override;
+            Request *createRequest() const;
+            ResultType createResult(void *result) const;
+
+            template <typename ... Detectors>
+            friend struct MultipleDetector;
+
             Settings settings;
         };
     }; // namespace Vision

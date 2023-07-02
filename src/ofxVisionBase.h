@@ -26,9 +26,32 @@
 
 namespace ofx {
     namespace Vision {
+        void objc_release(void *obj);
+        
+        template <typename Result>
         struct Base {
-            virtual ~Base();
-            virtual void setup();
+            using ResultType = Result;
+            
+            virtual ResultType detectWithCIImage(ofxVisionCIImage *image) = 0;
+            ResultType detect(const ofPixels &pix) {
+                return detectWithCIImage(toCIImage(pix));
+            }
+            ResultType detect(const ofBaseHasPixels &pix) {
+                return detectWithCIImage(toCIImage(pix));
+            }
+            ResultType detect(IOSurfaceRef surface) {
+                return detectWithCIImage(toCIImage(surface));
+            }
+            ResultType detect(CVPixelBufferRef pix) {
+                return detectWithCIImage(toCIImage(pix));
+            }
+
+            virtual ~Base() {
+                objc_release(handler);
+            }
+            virtual void setup() {
+                handler = createHandler();
+            }
         protected:
             Handler *handler;
         };

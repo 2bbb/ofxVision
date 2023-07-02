@@ -8,16 +8,11 @@
 
 #include "ofxVisionBase.h"
 
-#ifdef Request
-#   undef Request
-#endif
-
 #if OFX_VISION_VERSION_CHECK(11, 0)
 
 namespace ofx {
     namespace Vision {
-        struct DetectHumanHandPose : Base {
-            using ResultType = std::vector<Observation::HandPose>;
+        struct DetectHumanHandPose : Base<std::vector<Observation::HandPose>> {
             using Request = OFX_VISION_OBJC_CLASS(VNDetectHumanHandPoseRequest);
 
             enum class QualityLevel {
@@ -40,10 +35,14 @@ namespace ofx {
             void setMaximumHandCount(std::size_t count)
             { settings.maximumHandCount = count; };
 
-#include "details/detect_header.inl"
-            
         protected:
-#include "details/create_req_res_header.inl"
+            Base::ResultType detectWithCIImage(ofxVisionCIImage *image) override;
+            Request *createRequest() const;
+            ResultType createResult(void *result) const;
+
+            template <typename ... Detectors>
+            friend struct MultipleDetector;
+
             Settings settings;
         };
     }; // namespace Vision

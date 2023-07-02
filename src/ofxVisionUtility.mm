@@ -115,8 +115,10 @@ namespace ofx {
             return imageRef;
         }
         
+        ofxVisionCIImage *toCIImage(const ofPixels &pix)
+        { return [CIImage imageWithCGImage:ofPixelsToCGImageRef(pix)]; };
         ofxVisionCIImage *toCIImage(const ofBaseHasPixels &pix)
-        { return [CIImage imageWithCGImage:ofBaseHasPixelsToCGImageRef(pix)]; };
+        { return toCIImage(pix.getPixels()); };
         ofxVisionCIImage *toCIImage(CVPixelBufferRef pixelBuffer)
         { return [CIImage imageWithCVPixelBuffer:pixelBuffer]; };
         ofxVisionCIImage *toCIImage(IOSurfaceRef surface)

@@ -10,12 +10,10 @@
 
 namespace ofx {
     namespace Vision {
-        void Base::setup() {
-            handler = createHandler();
+        void objc_release(void *obj) {
+            id o = (id)obj;
+            OFX_VISION_RELEASE(o);
         }
-        Base::~Base() {
-            OFX_VISION_RETAIN(handler);
-        };
         
         bool detectMultiple(void *handler,
                             std::vector<void *> &request_vec,

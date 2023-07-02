@@ -188,19 +188,11 @@ public:
 #if OFX_VISION_VERSION_CHECK(11, 0)
     void drawOpticalFlow() {
         auto &flow = optical.result;
-#if OFX_VISION_USE_TEXTURE
         if(flow.isAllocated()) {
-#else
-        if(flow->isAllocated()) {
-#endif
             ofSetColor(255, 255, 255, 128);
             opticalShader.begin();
             opticalShader.setUniformTexture("base", grabber.getTexture(), 1);
-#if OFX_VISION_USE_TEXTURE
             flow.draw(0, 0, ofGetWidth(), ofGetHeight());
-#else
-            flow->draw(0, 0, ofGetWidth(), ofGetHeight());
-#endif
             opticalShader.end();
         }
     }

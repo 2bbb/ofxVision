@@ -18,17 +18,15 @@ namespace ofx {
     namespace Vision {
         using Target = AttentionBasedSaliencyImage;
         
-        Target::ResultType Target::detectWithCIImage(CIImage *image) {
+        Target::ResultType Target::detectWithCIImage(ofxVisionCIImage *image) {
             auto request = createRequest();
             NSError *err = nil;
             [handler performRequests:@[request]
-                           onCIImage:image
+                           onCIImage:(CIImage *)image
                          orientation:kCGImagePropertyOrientationUp
                                error:&err];
             return createResult(request);
         }
-        
-#include "details/detect_impl.inl"
         
         Target::Request *Target::createRequest() const {
             auto request = OFX_VISION_AUTORELEASE([[Target::Request alloc] init]);

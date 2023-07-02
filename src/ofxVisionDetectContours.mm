@@ -16,11 +16,11 @@ namespace ofx {
     namespace Vision {
         using Target = DetectContours;
 
-        Target::ResultType Target::detectWithCIImage(CIImage *image) {
+        Target::ResultType Target::detectWithCIImage(ofxVisionCIImage *image) {
             auto request = createRequest();
             NSError *err = nil;
             [handler performRequests:@[request]
-                           onCIImage:image
+                           onCIImage:(CIImage *)image
                          orientation:kCGImagePropertyOrientationUp
                                error:&err];
             if(err) {

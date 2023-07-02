@@ -56,12 +56,13 @@ namespace ofx {
             };
         };
         
-        using ofxVisionCIImage = OFX_VISION_OBJC_CLASS(CIImage);
+        using ofxVisionCIImage = void;
         
         using Handler = OFX_VISION_OBJC_CLASS(VNSequenceRequestHandler);
         using BaseRequest = OFX_VISION_OBJC_CLASS(VNRequest);
         using BaseObservation = OFX_VISION_OBJC_CLASS(VNObservation);
         
+        ofxVisionCIImage *toCIImage(const ofPixels &pix);
         ofxVisionCIImage *toCIImage(const ofBaseHasPixels &pix);
         ofxVisionCIImage *toCIImage(CVPixelBufferRef pixelBuffer);
         ofxVisionCIImage *toCIImage(IOSurfaceRef surface);

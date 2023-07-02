@@ -6,22 +6,11 @@
 
 #include "ofxVisionBase.h"
 
-#ifdef Request
-#   undef Request
-#endif
-
 #if OFX_VISION_VERSION_CHECK(11, 0)
-
-#define OFX_VISION_USE_TEXTURE 1
 
 namespace ofx {
     namespace Vision {
-        struct GenerateOpticalFlow : Base {
-#if OFX_VISION_USE_TEXTURE
-            using ResultType = ofTexture;
-#else
-            using ResultType = std::shared_ptr<ofFloatImage>;
-#endif
+        struct GenerateOpticalFlow : Base<ofTexture> {
             using Request = OFX_VISION_OBJC_CLASS(VNGenerateOpticalFlowRequest);
 
             
@@ -48,14 +37,24 @@ namespace ofx {
             void setAccuracyLevel(ComputationAccuracyLevel level)
             { settings.accuracyLevel = level; };
             
-            void setBaseImage(const ofBaseHasPixels &pix);
-            void setBaseImage(IOSurfaceRef surface);
-            void setBaseImage(CVPixelBufferRef pix);
+            void setBaseImage(ofxVisionCIImage *image);
+            void setBaseImage(const ofPixels &pix)
+            { setBaseImage(toCIImage(pix)); };
+            void setBaseImage(const ofBaseHasPixels &pix)
+            { setBaseImage(toCIImage(pix)); }
+            void setBaseImage(IOSurfaceRef surface)
+            { setBaseImage(toCIImage(surface)); }
+            void setBaseImage(CVPixelBufferRef pix)
+            { setBaseImage(toCIImage(pix)); };
 
-#include "details/detect_header.inl"
-            
         protected:
-#include "details/create_req_res_header.inl"
+            Base::ResultType detectWithCIImage(ofxVisionCIImage *image) override;
+            Request *createRequest() const;
+            ResultType createResult(void *result) const;
+
+            template <typename ... Detectors>
+            friend struct MultipleDetector;
+
             void releaseImage();
             Settings settings;
         };

@@ -10,14 +10,9 @@
 
 #if OFX_VISION_VERSION_CHECK(11, 0)
 
-#ifdef Request
-#   undef Request
-#endif
-
 namespace ofx {
     namespace Vision {
-        struct DetectContours : Base {
-            using ResultType = Observation::Contours;
+        struct DetectContours : Base<Observation::Contours> {
             using Request = OFX_VISION_OBJC_CLASS(VNDetectContoursRequest);
             
             struct Settings {
@@ -42,11 +37,15 @@ namespace ofx {
             { settings.detectsDarkOnLight = detectsDarkOnLight; }
             bool getDetectsDarkOnLight() const
             { return settings.detectsDarkOnLight; }
-
-#include "details/detect_header.inl"
             
         protected:
-#include "details/create_req_res_header.inl"
+            Base::ResultType detectWithCIImage(ofxVisionCIImage *image) override;
+            Request *createRequest() const;
+            ResultType createResult(void *result) const;
+
+            template <typename ... Detectors>
+            friend struct MultipleDetector;
+            
             Settings settings;
         };
     }; // namespace Vision

@@ -9,24 +9,23 @@
 
 #if OFX_VISION_VERSION_CHECK_X(10, 13)
 
-#ifdef Request
-#   undef Request
-#endif
-
 namespace ofx {
     namespace Vision {
-        struct DetectFaceLandmarks : Base {
-            using ResultType = std::vector<Observation::Face>;
+        struct DetectFaceLandmarks : Base<std::vector<Observation::Face>> {
             using Request = OFX_VISION_OBJC_CLASS(VNDetectFaceLandmarksRequest);
 
             struct Settings {
                 
             };
             
-#include "details/detect_header.inl"
-            
         protected:
-#include "details/create_req_res_header.inl"
+            Base::ResultType detectWithCIImage(ofxVisionCIImage *image) override;
+            Request *createRequest() const;
+            ResultType createResult(void *result) const;
+
+            template <typename ... Detectors>
+            friend struct MultipleDetector;
+
             Settings settings;
         };
     }; // namespace Vision

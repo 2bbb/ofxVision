@@ -6,27 +6,22 @@
 
 #include "ofxVisionBase.h"
 
-#include "ofImage.h"
-#include "ofVectorMath.h"
-
 #if OFX_VISION_VERSION_CHECK_X(10, 15)
-
-#ifdef Request
-#   undef Request
-#endif
 
 namespace ofx {
     namespace Vision {
-        struct ObjectnessBasedSaliencyImage : Base {
-            using ResultType = Observation::SaliencyImage;
+        struct ObjectnessBasedSaliencyImage : Base<Observation::SaliencyImage> {
             using Request = OFX_VISION_OBJC_CLASS(VNGenerateObjectnessBasedSaliencyImageRequest);
 
             struct Settings {};
             
-#include "details/detect_header.inl"
-
         protected:
-#include "details/create_req_res_header.inl"
+            Base::ResultType detectWithCIImage(ofxVisionCIImage *image) override;
+            Request *createRequest() const;
+            ResultType createResult(void *result) const;
+
+            template <typename ... Detectors>
+            friend struct MultipleDetector;
             
             Settings settings;
         };

@@ -15,12 +15,12 @@ namespace ofx {
     namespace Vision {
         using Target = DetectFaceLandmarks;
         
-        Target::ResultType Target::detectWithCIImage(CIImage *image)
+        Target::ResultType Target::detectWithCIImage(ofxVisionCIImage *image)
         {
             auto request = createRequest();
             NSError *err = nil;
             [handler performRequests:@[request]
-                           onCIImage:image
+                           onCIImage:(CIImage *)image
                          orientation:kCGImagePropertyOrientationUp
                                error:&err];
             if(err) {
@@ -39,6 +39,7 @@ namespace ofx {
         
         Target::ResultType Target::createResult(void *req) const {
             Target::Request *request = (Target::Request *)req;
+            ofLogNotice(__func__) << request;
             
             Target::ResultType result;
             result.resize(request.results.count);

@@ -16,7 +16,6 @@
 		877D2AFF474AAB321BF69E8E /* ofxVisionDetectHumanBodyPose.mm in Sources */ = {isa = PBXBuildFile; fileRef = A0A7D4B3749E290F4EBB8607 /* ofxVisionDetectHumanBodyPose.mm */; };
 		ADABD316598F5C14F2C53FE5 /* Vision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E3B741D748E4E39080DFF0 /* Vision.framework */; };
 		CBDC9F9107D8B55770177A8E /* ofxVisionUtility.mm in Sources */ = {isa = PBXBuildFile; fileRef = BDB98B5D06665D912ABCED52 /* ofxVisionUtility.mm */; };
-		D8517B48B1C5005F30A77FCF /* detect_impl.inl in Sources */ = {isa = PBXBuildFile; fileRef = 94C1E02E202621D988C24DD3 /* detect_impl.inl */; };
 		E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1D0A3A1BDC003C02F2 /* main.cpp */; };
 		E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */; };
 		E565C7BBBBD6727431DCE818 /* ofxVisionGenerateOpticalFlow.mm in Sources */ = {isa = PBXBuildFile; fileRef = F7CB4417AF9667C9D290FC39 /* ofxVisionGenerateOpticalFlow.mm */; };
@@ -49,9 +48,6 @@
 		82E09B9EE263A531741F2AC2 /* ofxVisionDetectHumanBodyPose.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxVisionDetectHumanBodyPose.h; path = ../../ofxVision/src/ofxVisionDetectHumanBodyPose.h; sourceTree = SOURCE_ROOT; };
 		8BF1FDD592B06A984CC6DD33 /* ofxVisionDetectRectangles.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = ofxVisionDetectRectangles.mm; path = ../../ofxVision/src/ofxVisionDetectRectangles.mm; sourceTree = SOURCE_ROOT; };
 		8D9059145F521ED1D7200DE4 /* ofxVisionObjectnessBasedSaliencyImage.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxVisionObjectnessBasedSaliencyImage.h; path = ../../ofxVision/src/ofxVisionObjectnessBasedSaliencyImage.h; sourceTree = SOURCE_ROOT; };
-		94C1E02E202621D988C24DD3 /* detect_impl.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = detect_impl.inl; path = ../src/details/detect_impl.inl; sourceTree = SOURCE_ROOT; };
-		954E92BC2A5074AD00D70F8C /* detect_header.inl */ = {isa = PBXFileReference; lastKnownFileType = text; name = detect_header.inl; path = ../src/details/detect_header.inl; sourceTree = "<group>"; };
-		954E92BD2A50755B00D70F8C /* create_req_res_header.inl */ = {isa = PBXFileReference; lastKnownFileType = text; name = create_req_res_header.inl; path = ../src/details/create_req_res_header.inl; sourceTree = "<group>"; };
 		954E92C02A52213A00D70F8C /* type_traits.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = type_traits.hpp; path = ../src/details/type_traits.hpp; sourceTree = "<group>"; };
 		957656398AF4DE9CAE70EA49 /* ofxVisionDetectRectangles.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxVisionDetectRectangles.h; path = ../../ofxVision/src/ofxVisionDetectRectangles.h; sourceTree = SOURCE_ROOT; };
 		97CB0764C55EE6236E126631 /* ofxVisionAttentionBasedSaliencyImage.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxVisionAttentionBasedSaliencyImage.h; path = ../../ofxVision/src/ofxVisionAttentionBasedSaliencyImage.h; sourceTree = SOURCE_ROOT; };
@@ -326,9 +322,6 @@
 		912FF594F0BBF2040D6FB3F5 /* details */ = {
 			isa = PBXGroup;
 			children = (
-				94C1E02E202621D988C24DD3 /* detect_impl.inl */,
-				954E92BC2A5074AD00D70F8C /* detect_header.inl */,
-				954E92BD2A50755B00D70F8C /* create_req_res_header.inl */,
 				954E92C02A52213A00D70F8C /* type_traits.hpp */,
 			);
 			name = details;
@@ -755,7 +748,6 @@
 			files = (
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
-				D8517B48B1C5005F30A77FCF /* detect_impl.inl in Sources */,
 				7A91C6ED62E15C466AE36E8E /* ofxVisionAttentionBasedSaliencyImage.mm in Sources */,
 				FDD4F66284D67A942B59301D /* ofxVisionBase.mm in Sources */,
 				5F6FCD2A0FDC5F1C7CBA5CA4 /* ofxVisionDetectContours.mm in Sources */,
