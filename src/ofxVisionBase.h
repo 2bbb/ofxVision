@@ -24,22 +24,112 @@
 
 namespace ofx {
     namespace Vision {
-        struct MultipleDetectorBase {
-            
-        };
-        
         struct Base {
             virtual ~Base();
             virtual void setup();
         protected:
-            void *handler_impl;
-            MultipleDetectorBase *multipleDetector{nullptr};
-            friend struct MultipleDetectorBase;
+            Handler *handler;
         };
         
-        template <typename ... Requests>
-        struct MultipleDetector : MultipleDetectorBase {
-            std::tuple<typename Requests::ResultType ...> results;
+        bool detectMultiple(void *handler,
+                            std::vector<void *> &request_vec,
+                            void *image);
+        
+        template <typename ... Detectors>
+        struct MultipleDetector {
+            void setup() {
+                handler = createHandler();
+            }
+            
+            bool detectWithCIImage(ofxVisionCIImage *image)
+            {
+                std::tuple<typename Detectors::Request * ...> requests;
+                std::vector<BaseRequest *> requests_vec;
+                create_requests(requests, requests_vec);
+                
+                auto success = detectMultiple(handler, requests_vec, image);
+                if(!success) {
+                    ofLogError(__func__) << "What";
+                    return false;
+                }
+                set_results(requests);
+                return true;
+            }
+            bool detect(const ofBaseHasPixels &pix) {
+                return detectWithCIImage(toCIImage(pix));
+            }
+            bool detect(IOSurfaceRef surface) {
+                return detectWithCIImage(toCIImage(surface));
+            }
+            bool detect(CVPixelBufferRef pix) {
+                return detectWithCIImage(toCIImage(pix));
+            }
+            
+            template <std::size_t n>
+            auto getResult() const
+                -> typename std::enable_if<
+                    n < sizeof...(Detectors),
+                    const typename std::tuple_element<
+                        n,
+                        std::tuple<typename Detectors::ResultType ...>
+                    >::type &
+                >::type
+            {
+                return std::get<n>(results);
+            }
+                                    
+        protected:
+            template <std::size_t i = 0>
+            auto create_requests(std::tuple<typename Detectors::Request * ...> &requests, std::vector<BaseRequest *> &vs)
+                -> typename std::enable_if<
+                    i < sizeof...(Detectors) - 1,
+                    void
+                >::type
+            {
+                std::get<i>(requests) = std::get<i>(detectors).createRequest();
+                vs.push_back((BaseRequest *)std::get<i>(requests));
+                create_requests<i + 1>(requests, vs);
+            }
+
+            template <std::size_t i>
+            auto create_requests(std::tuple<typename Detectors::Request * ...> &requests,
+                                 std::vector<BaseRequest *> &vs)
+                -> typename std::enable_if<
+                    i == sizeof...(Detectors) - 1,
+                    void
+                >::type
+            {
+                std::get<i>(requests) = std::get<i>(detectors).createRequest();
+                vs.push_back((BaseRequest *)std::get<i>(requests));
+            }
+
+            template <std::size_t i = 0>
+            auto set_results(std::tuple<typename Detectors::Request * ...> &requests)
+                -> typename std::enable_if<
+                    i < sizeof...(Detectors) - 1,
+                    void
+                >::type
+            {
+                std::get<i>(results) = std::get<i>(detectors).createResult(std::get<i>(requests));
+                set_results<i + 1>(requests);
+            }
+
+            template <std::size_t i>
+            auto set_results(std::tuple<typename Detectors::Request * ...> &requests)
+                -> typename std::enable_if<
+                    i == sizeof...(Detectors) - 1,
+                    void
+                >::type
+            {
+                std::get<i>(results) = std::get<i>(detectors).createResult(std::get<i>(requests));
+            }
+            
+            std::tuple<Detectors ...> detectors;
+            std::tuple<typename Detectors::ResultType ...> results;
+            Handler *handler;
         };
     };
 };
+
+template <typename ... Detectors>
+using ofxVisionMultipleDetector = ofx::Vision::MultipleDetector<Detectors ...>;

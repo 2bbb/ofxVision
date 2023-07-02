@@ -14,16 +14,12 @@
 #   undef Request
 #endif
 
-#if __OBJC__
-#   define Request VNDetectContoursRequest
-#else
-#   define Request void
-#endif
-
 namespace ofx {
     namespace Vision {
         struct DetectContours : Base {
             using ResultType = Observation::Contours;
+            using Request = OFX_VISION_OBJC_CLASS(VNDetectContoursRequest);
+            
             struct Settings {
                 float contrastAdjustment{2.0f}; // 0.0 - 3.0
                 float contrastPivot{0.5}; // 0.0 - 1.0, nil (automatically)

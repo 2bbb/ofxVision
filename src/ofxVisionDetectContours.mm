@@ -14,46 +14,35 @@
 
 namespace ofx {
     namespace Vision {
-        using TargetRequest = DetectContours;
-        
-        namespace {
-            Request *createRequest(const TargetRequest::Settings &settings) {
-                auto request = [[VNDetectContoursRequest alloc] init];
-                request.contrastAdjustment = settings.contrastAdjustment;
-                request.contrastPivot = settings.contrastPivot < 0.0f ? nil : @(settings.contrastPivot);
-                request.detectsDarkOnLight = settings.detectsDarkOnLight;
-                OFX_VISION_AUTORELEASE(request);
-                return request;
+        using Target = DetectContours;
+
+        Target::ResultType Target::detectWithCIImage(CIImage *image) {
+            auto request = createRequest();
+            NSError *err = nil;
+            [handler performRequests:@[request]
+                           onCIImage:image
+                         orientation:kCGImagePropertyOrientationUp
+                               error:&err];
+            if(err) {
+                ofLogError("ofxVisionDetectContours") << err.description.UTF8String;
+                return {};
             }
-            
-            TargetRequest::ResultType detectWithCIImage(void *handler_impl,
-                                                        const TargetRequest::Settings &settings,
-                                                        CIImage *image)
-            {
-                auto handler = (VNSequenceRequestHandler *)handler_impl;
-                auto request = createRequest(settings);
-                NSError *err = nil;
-                [handler performRequests:@[request]
-                               onCIImage:image
-                             orientation:kCGImagePropertyOrientationUp
-                                   error:&err];
-                if(err) {
-                    ofLogError("ofxVisionDetectContours") << err.description.UTF8String;
-                    return {};
-                }
-                TargetRequest::ResultType result;
-                if(request.results.firstObject) result = toOF(request.results.firstObject);
-                return result;
-            }
-        };
+            return createResult(request);
+        }
         
 #include "details/detect_impl.inl"
 
-        Request *TargetRequest::createRequest() const
-        { return ofx::Vision::createRequest(settings); }
+        Target::Request *Target::createRequest() const {
+            auto request = OFX_VISION_AUTORELEASE([[VNDetectContoursRequest alloc] init]);
+            request.contrastAdjustment = settings.contrastAdjustment;
+            request.contrastPivot = settings.contrastPivot < 0.0f ? nil : @(settings.contrastPivot);
+            request.detectsDarkOnLight = settings.detectsDarkOnLight;
+            return request;
+        }
         
-        TargetRequest::ResultType TargetRequest::createResult(Request *request) const {
-            TargetRequest::ResultType result;
+        Target::ResultType Target::createResult(void *req) const {
+            Target::Request *request = (Target::Request *)req;
+            Target::ResultType result;
             if(request.results.firstObject) result = toOF(request.results.firstObject);
             return result;
         }

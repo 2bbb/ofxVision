@@ -13,47 +13,34 @@
 
 namespace ofx {
     namespace Vision {
-        using TargetRequest = DetectFaceLandmarks;
+        using Target = DetectFaceLandmarks;
         
-        namespace {
-            Request *createRequest(const TargetRequest::Settings &settings) {
-                auto request = [[VNDetectFaceLandmarksRequest alloc] init];
-                
-                OFX_VISION_AUTORELEASE(request);
-                return request;
+        Target::ResultType Target::detectWithCIImage(CIImage *image)
+        {
+            auto request = createRequest();
+            NSError *err = nil;
+            [handler performRequests:@[request]
+                           onCIImage:image
+                         orientation:kCGImagePropertyOrientationUp
+                               error:&err];
+            if(err) {
+                ofLogError("ofxVisionDetectFaceLandmarks") << err.description.UTF8String;
+                return {};
             }
-            
-            TargetRequest::ResultType detectWithCIImage(void *handler_impl,
-                                                        const TargetRequest::Settings &settings,
-                                                        CIImage *image)
-            {
-                auto handler = (VNSequenceRequestHandler *)handler_impl;
-                auto request = createRequest(settings);
-                NSError *err = nil;
-                [handler performRequests:@[request]
-                               onCIImage:image
-                             orientation:kCGImagePropertyOrientationUp
-                                   error:&err];
-                if(err) {
-                    ofLogError("ofxVisionDetectFaceLandmarks") << err.description.UTF8String;
-                    return {};
-                }
-                TargetRequest::ResultType result;
-                result.resize(request.results.count);
-                for(auto i = 0; i < result.size(); ++i) {
-                    result[i] = toOF(request.results[i]);
-                }
-                return result;
-            }
-        };
+            return createResult(request);
+        }
         
 #include "details/detect_impl.inl"
 
-        Request *TargetRequest::createRequest() const
-        { return ofx::Vision::createRequest(settings); }
+        Target::Request *Target::createRequest() const {
+            auto request = OFX_VISION_AUTORELEASE([[VNDetectFaceLandmarksRequest alloc] init]);
+            return request;
+        }
         
-        TargetRequest::ResultType TargetRequest::createResult(Request *request) const {
-            TargetRequest::ResultType result;
+        Target::ResultType Target::createResult(void *req) const {
+            Target::Request *request = (Target::Request *)req;
+            
+            Target::ResultType result;
             result.resize(request.results.count);
             for(auto i = 0; i < result.size(); ++i) {
                 result[i] = toOF(request.results[i]);

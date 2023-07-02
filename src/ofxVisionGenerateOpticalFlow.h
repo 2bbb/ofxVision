@@ -12,12 +12,6 @@
 
 #if OFX_VISION_VERSION_CHECK(11, 0)
 
-#if __OBJC__
-#   define Request VNGenerateOpticalFlowRequest
-#else
-#   define Request void
-#endif
-
 #define OFX_VISION_USE_TEXTURE 1
 
 namespace ofx {
@@ -28,6 +22,9 @@ namespace ofx {
 #else
             using ResultType = std::shared_ptr<ofFloatImage>;
 #endif
+            using Request = OFX_VISION_OBJC_CLASS(VNGenerateOpticalFlowRequest);
+
+            
             enum class ComputationAccuracyLevel {
                 Low,
                 Medium,

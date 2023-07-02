@@ -4,15 +4,20 @@
 //  Created by 2bit on 2023/07/01.
 //
 
-        TargetRequest::ResultType TargetRequest::detect(const ofBaseHasPixels &pix) {
+        Target::ResultType Target::detect(const ofPixels &pix) {
+            CGImageRef cgImage = ofPixelsToCGImageRef(pix);
+            return detectWithCIImage([CIImage imageWithCGImage:cgImage]);
+        }
+
+        Target::ResultType Target::detect(const ofBaseHasPixels &pix) {
             CGImageRef cgImage = ofBaseHasPixelsToCGImageRef(pix);
-            return detectWithCIImage(handler_impl, settings, [CIImage imageWithCGImage:cgImage]);
+            return detectWithCIImage([CIImage imageWithCGImage:cgImage]);
         }
 
-        TargetRequest::ResultType TargetRequest::detect(IOSurfaceRef surface) {
-            return detectWithCIImage(handler_impl, settings, [CIImage imageWithIOSurface:surface]);
+        Target::ResultType Target::detect(IOSurfaceRef surface) {
+            return detectWithCIImage([CIImage imageWithIOSurface:surface]);
         }
 
-        TargetRequest::ResultType TargetRequest::detect(CVPixelBufferRef pix) {
-            return detectWithCIImage(handler_impl, settings, [CIImage imageWithCVPixelBuffer:pix]);
+        Target::ResultType Target::detect(CVPixelBufferRef pix) {
+            return detectWithCIImage([CIImage imageWithCVPixelBuffer:pix]);
         }

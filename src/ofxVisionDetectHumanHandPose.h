@@ -14,16 +14,12 @@
 
 #if OFX_VISION_VERSION_CHECK(11, 0)
 
-#if __OBJC__
-#   define Request VNDetectHumanHandPoseRequest
-#else
-#   define Request void
-#endif
-
 namespace ofx {
     namespace Vision {
         struct DetectHumanHandPose : Base {
             using ResultType = std::vector<Observation::HandPose>;
+            using Request = OFX_VISION_OBJC_CLASS(VNDetectHumanHandPoseRequest);
+
             enum class QualityLevel {
                 Fast,
                 Balanced,

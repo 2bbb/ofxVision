@@ -79,10 +79,10 @@ namespace ofx {
         }
 
         
-        CGImageRef ofBaseHasPixelsToCGImageRef(const ofBaseHasPixels &pix) {
-            auto width = pix.getPixels().getWidth();
-            auto height = pix.getPixels().getHeight();
-            auto numComponents = pix.getPixels().getNumChannels();
+        CGImageRef ofPixelsToCGImageRef(const ofPixels &pix) {
+            auto width = pix.getWidth();
+            auto height = pix.getHeight();
+            auto numComponents = pix.getNumChannels();
             int bitsPerColorComponent = 8;
             auto rawImageDataLength = width * height * numComponents;
             
@@ -93,7 +93,7 @@ namespace ofx {
                 colorSpaceRef = CGColorSpaceCreateDeviceRGB();
             }
             
-            GLubyte *imageDataBuffer = (GLubyte *)(pix.getPixels().getData());
+            GLubyte *imageDataBuffer = (GLubyte *)(pix.getData());
             CGDataProviderRef dataProviderRef = CGDataProviderCreateWithData(nullptr, imageDataBuffer, rawImageDataLength, nil);
             
             CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault;
@@ -113,6 +113,17 @@ namespace ofx {
             CGDataProviderRelease(dataProviderRef);
             OFX_VISION_CFAUTORELEASE(imageRef);
             return imageRef;
+        }
+        
+        ofxVisionCIImage *toCIImage(const ofBaseHasPixels &pix)
+        { return [CIImage imageWithCGImage:ofBaseHasPixelsToCGImageRef(pix)]; };
+        ofxVisionCIImage *toCIImage(CVPixelBufferRef pixelBuffer)
+        { return [CIImage imageWithCVPixelBuffer:pixelBuffer]; };
+        ofxVisionCIImage *toCIImage(IOSurfaceRef surface)
+        { return [CIImage imageWithIOSurface:surface]; };
+        
+        Handler *createHandler() {
+            return [[Handler alloc] init];
         }
     }; // namespace Vision
 }; // namespace Vision

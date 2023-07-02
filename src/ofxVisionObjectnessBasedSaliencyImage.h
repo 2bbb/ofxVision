@@ -15,26 +15,19 @@
 #   undef Request
 #endif
 
-#if __OBJC__
-#   define Request VNGenerateObjectnessBasedSaliencyImageRequest
-#else
-#   define Request void
-#endif
-
 namespace ofx {
     namespace Vision {
         struct ObjectnessBasedSaliencyImage : Base {
             using ResultType = Observation::SaliencyImage;
-            
+            using Request = OFX_VISION_OBJC_CLASS(VNGenerateObjectnessBasedSaliencyImageRequest);
+
             struct Settings {};
             
-            ResultType detect(const ofBaseHasPixels &pix);
-            ResultType detect(IOSurfaceRef surace);
-            ResultType detect(CVPixelBufferRef pix);
-            
+#include "details/detect_header.inl"
+
         protected:
-            Request *createRequest() const;
-            ResultType createResult(Request *result) const;
+#include "details/create_req_res_header.inl"
+            
             Settings settings;
         };
     }; // namespace Vision

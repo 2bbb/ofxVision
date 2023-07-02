@@ -13,16 +13,12 @@
 #   undef Request
 #endif
 
-#if __OBJC__
-#   define Request VNDetectRectanglesRequest
-#else
-#   define Request void
-#endif
-
 namespace ofx {
     namespace Vision {
         struct DetectRectangles : Base {
             using ResultType = std::vector<Observation::Rectangle>;
+            using Request = OFX_VISION_OBJC_CLASS(VNDetectRectanglesRequest);
+
             struct Settings {
                 float minimumAspectRatio{0.5f}; // 0.0 - 1.0
                 float maximumAspectRatio{1.0f}; // 0.0 - 1.0

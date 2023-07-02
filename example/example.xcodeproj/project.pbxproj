@@ -277,10 +277,14 @@
 			children = (
 				912FF594F0BBF2040D6FB3F5 /* details */,
 				248F5D6FC4671529138E85FD /* ofxVision.h */,
-				97CB0764C55EE6236E126631 /* ofxVisionAttentionBasedSaliencyImage.h */,
-				1F9486C64DE0E097303201D8 /* ofxVisionAttentionBasedSaliencyImage.mm */,
 				3CCC9632C8737837D193AE26 /* ofxVisionBase.h */,
 				F498700AC51FB60686DA279F /* ofxVisionBase.mm */,
+				3A1B143C44A039F7C4DF11FE /* ofxVisionObservation.h */,
+				220EA72B930486F78F1D18C4 /* ofxVisionUtility.h */,
+				BDB98B5D06665D912ABCED52 /* ofxVisionUtility.mm */,
+				9E0416ED116AABEEE8CA2852 /* ofxVisionObjCUtility.h */,
+				97CB0764C55EE6236E126631 /* ofxVisionAttentionBasedSaliencyImage.h */,
+				1F9486C64DE0E097303201D8 /* ofxVisionAttentionBasedSaliencyImage.mm */,
 				AB4943F3FFFC732E9DB45159 /* ofxVisionDetectContours.h */,
 				3BAF0DFC296C328C5AE5B727 /* ofxVisionDetectContours.mm */,
 				A4AF313DC75259ECD2E6B653 /* ofxVisionDetectFaceLandmarks.h */,
@@ -293,14 +297,10 @@
 				8BF1FDD592B06A984CC6DD33 /* ofxVisionDetectRectangles.mm */,
 				050D31DE0FDEBB5B1F48D2E9 /* ofxVisionGenerateOpticalFlow.h */,
 				F7CB4417AF9667C9D290FC39 /* ofxVisionGenerateOpticalFlow.mm */,
-				9E0416ED116AABEEE8CA2852 /* ofxVisionObjCUtility.h */,
 				8D9059145F521ED1D7200DE4 /* ofxVisionObjectnessBasedSaliencyImage.h */,
 				AAF10EF50E7130A536EC9C1E /* ofxVisionObjectnessBasedSaliencyImage.mm */,
-				3A1B143C44A039F7C4DF11FE /* ofxVisionObservation.h */,
 				FDF179EC90657B7E77FE1828 /* ofxVisionPersonSegmentation.h */,
 				DBC861D8572E9CF3D7972C0E /* ofxVisionPersonSegmentation.mm */,
-				220EA72B930486F78F1D18C4 /* ofxVisionUtility.h */,
-				BDB98B5D06665D912ABCED52 /* ofxVisionUtility.mm */,
 			);
 			name = src;
 			sourceTree = "<group>";

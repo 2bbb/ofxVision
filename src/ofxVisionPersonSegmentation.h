@@ -14,16 +14,12 @@
 #   undef Request
 #endif
 
-#if __OBJC__
-#   define Request VNGeneratePersonSegmentationRequest
-#else
-#   define Request void
-#endif
-
 namespace ofx {
     namespace Vision {
         struct PersonSegmentation : Base {
             using ResultType = std::shared_ptr<ofImage>;
+            using Request = OFX_VISION_OBJC_CLASS(VNGeneratePersonSegmentationRequest);
+
             enum class QualityLevel {
                 Fast,
                 Balanced,

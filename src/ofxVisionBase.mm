@@ -11,12 +11,35 @@
 namespace ofx {
     namespace Vision {
         void Base::setup() {
-            VNSequenceRequestHandler *handler = [[VNSequenceRequestHandler alloc] init];
-            handler_impl = (OFX_VISION_BRIDGE_RETAINED void *)handler;
+            handler = createHandler();
         }
         Base::~Base() {
-            id handler = (OFX_VISION_BRIDGE_TRANSFER VNSequenceRequestHandler *)handler_impl;
-            OFX_VISION_RELEASE(handler);
+            OFX_VISION_RETAIN(handler);
         };
+        
+        bool detectMultiple(void *handler,
+                            std::vector<void *> &request_vec,
+                            void *image)
+        {
+            NSMutableArray<VNImageBasedRequest *> *requests = [NSMutableArray array];
+            for(auto i = 0; i < request_vec.size(); ++i) {
+                [requests addObject:(VNImageBasedRequest *)request_vec[i]];
+            }
+            NSError *err = nil;
+            BOOL success= [(Handler *)handler performRequests:requests
+                                                    onCIImage:(CIImage *)image
+                                                  orientation:kCGImagePropertyOrientationUp
+                                                        error:&err];
+            if(err) {
+                ofLogError("ofxVisionMultipleDetector::detect") << err.description.UTF8String;
+                return false;
+            }
+            if(!success) {
+                ofLogError("ofxVisionMultipleDetector::detect") << "what";
+                return false;
+            }
+
+            return true;
+        }
     };
 };

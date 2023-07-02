@@ -32,10 +32,21 @@ class ofApp : public ofBaseApp {
 
     RequestAndObservation<ofxVisionDetectRectangles> rectangles;
     RequestAndObservation<ofxVisionDetectFaceLandmarks> face_landmarks;
-
+#if OFX_VISION_VERSION_CHECK(11, 0)
+    ofxVisionMultipleDetector<
+        ofxVisionDetectHumanHandPose,
+        ofxVisionDetectFaceLandmarks
+    > multiple;
+#elif OFX_VISION_VERSION_CHECK_X(10, 13)
+    ofxVisionMultipleDetector<
+        ofxVisionDetectRectangles,
+        ofxVisionDetectFaceLandmarks
+    > multiple;
+#endif
+    
     ofShader opticalShader;
     
-    const int num_mode = 9;
+    const int num_mode = 10;
     int mode = num_mode - 1;
 public:
 	void setup() {
@@ -44,6 +55,7 @@ public:
         
 #if OFX_VISION_VERSION_CHECK(12, 0)
         person.setup();
+        person.setQualityLevel(ofxVisionPersonSegmentation::QualityLevel::Accurate);
 #endif
 #if OFX_VISION_VERSION_CHECK_X(10, 15)
         att_saliency.setup();
@@ -63,6 +75,9 @@ public:
         handpose.setup(16ul);
         bodypose.setup();
 #endif
+        
+        multiple.setup();
+        
         ofEnableAlphaBlending();
         ofSetBackgroundColor(0);
 	}
@@ -114,6 +129,11 @@ public:
                     break;
                 case 8:
                     face_landmarks.detect(grabber);
+                    break;
+                case 9:
+                    if(!multiple.detect(grabber)) {
+                        ofLogError("multiple.detect") << "failed";
+                    }
                     break;
             }
             prev.setFromPixels(grabber.getPixels());
@@ -320,6 +340,88 @@ public:
             ofPopMatrix();
         }
     } // void drawFaceLandmarks()
+        
+    void drawMultiple() {
+#if OFX_VISION_VERSION_CHECK(11, 0)
+        // handpose
+        {
+            const glm::vec2 s{ofGetWidth(), ofGetHeight()};
+            auto &hands = multiple.getResult<0>();
+            for(auto &&hand : hands) {
+                const float size = 3.0f;
+                ofSetColor(255, 0, (int)hand.chirality == 1 ? 255 : 0);
+                if(hand.wrist) {
+                    ofDrawCircle(hand.wrist.position * s, size);
+                }
+                for(auto i = 0; i < 4; ++i) {
+                    if(hand.thumb[i]) {
+                        ofDrawCircle(hand.thumb[i].position * s, size);
+                    }
+                    for(auto j = 0; j < 4; ++j) {
+                        if(hand[j][i]) {
+                            ofDrawCircle(hand[j][i].position * s, size);
+                        }
+                    }
+                }
+                
+                ofSetColor(0, 255, (int)hand.chirality == 1 ? 255 : 0);
+                if(hand.wrist) {
+                    if(hand.thumb[0]) {
+                        ofDrawLine(hand.wrist.position * s, hand.thumb[0].position * s);
+                    }
+                    for(auto j = 0; j < 4; ++j) {
+                        if(hand[j][0]) {
+                            ofDrawLine(hand.wrist.position * s, hand[j][0].position * s);
+                        }
+                    }
+                }
+                for(auto i = 0; i < 3; ++i) {
+                    if(hand.thumb[i] && hand.thumb[i + 1]) {
+                        ofDrawLine(hand.thumb[i].position * s, hand.thumb[i + 1].position * s);
+                    }
+                    for(auto j = 0; j < 4; ++j) {
+                        if(hand[j][i]) {
+                            ofDrawLine(hand[j][i].position * s, hand[j][i + 1].position * s);
+                        }
+                    }
+                }
+            }
+        }
+#else
+        // rectangles
+        {
+            ofPushMatrix();
+            ofScale(ofGetWidth(), ofGetHeight());
+            const auto &rectangles = multiple.getResult<0>();
+            ofSetColor(255, 0, 0);
+            for(const auto &rect : rectangles) {
+                ofDrawLine(rect.topLeft, rect.topRight);
+                ofDrawLine(rect.topRight, rect.bottomRight);
+                ofDrawLine(rect.bottomRight, rect.bottomLeft);
+                ofDrawLine(rect.bottomLeft, rect.topLeft);
+            }
+            ofPopMatrix();
+        }
+#endif
+        // face landmarks
+        {
+            const auto &faces = multiple.getResult<1>();
+            auto w = ofGetWidth();
+            auto h = ofGetHeight();
+            for(auto &face : faces) {
+                ofPushMatrix();
+                const auto scale = glm::vec2{face.boundingBox.width * w, face.boundingBox.height * h};
+                ofTranslate(face.boundingBox.x * w, face.boundingBox.y * h);
+                ofSetColor(255, 0, 0);
+                for(auto i = 1ul; i < face.landmarks.size(); ++i) {
+                    const auto &landmarks = face.landmarks[i];
+                    drawLandmarksRegion(landmarks, scale, 5.0f);
+                }
+                ofPopMatrix();
+            }
+        }
+    } // void drawMultiple
+
 	void draw() {
         const glm::vec2 s = { ofGetWidth(), ofGetHeight() };
         ofSetColor(255, 255, 255);
@@ -390,6 +492,14 @@ public:
                 drawFaceLandmarks();
                 ofDrawBitmapStringHighlight("face landmark detection", 20, 20);
                 break;
+            case 9:
+                drawMultiple();
+#if OFX_VISION_VERSION_CHECK(11, 0)
+                ofDrawBitmapStringHighlight("hand tracking & face landmark detection", 20, 20);
+#else
+                ofDrawBitmapStringHighlight("rectangles & face landmark detection", 20, 20);
+#endif
+                break;;
         }
 
 	}

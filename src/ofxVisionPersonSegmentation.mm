@@ -14,7 +14,7 @@
 
 namespace ofx {
     namespace Vision {
-        using TargetRequest = PersonSegmentation;
+        using Target = PersonSegmentation;
         
         VNGeneratePersonSegmentationRequestQualityLevel conv(PersonSegmentation::QualityLevel level)
         {
@@ -28,42 +28,31 @@ namespace ofx {
             }
         }
         
-        namespace {
-            Request *createRequest(const PersonSegmentation::Settings &settings)
-            {
-                auto request = [[Request alloc] init];
-                request.qualityLevel = conv(settings.qualityLevel);
-                request.outputPixelFormat = kCVPixelFormatType_OneComponent8;
-                OFX_VISION_AUTORELEASE(request);
-                return request;
+        Target::ResultType Target::detectWithCIImage(CIImage *image) {
+            auto request = createRequest();
+            NSError *err = nil;
+            [handler performRequests:@[request]
+                           onCIImage:image
+                         orientation:kCGImagePropertyOrientationUp
+                               error:&err];
+            if(err) {
+                ofLogError("ofxVisionPersonSegmentation") << err.description.UTF8String;
+                return std::make_shared<ofImage>();
             }
-            
-            TargetRequest::ResultType detectWithCIImage(void *handler_impl,
-                                                        const PersonSegmentation::Settings &settings,
-                                                        CIImage *image)
-            {
-                VNSequenceRequestHandler *handler = (VNSequenceRequestHandler *)handler_impl;
-                VNGeneratePersonSegmentationRequest *request = createRequest(settings);
-                NSError *err = nil;
-                [handler performRequests:@[request]
-                               onCIImage:image
-                             orientation:kCGImagePropertyOrientationUp
-                                   error:&err];
-                if(err) {
-                    ofLogError("ofxVisionPersonSegmentation") << err.description.UTF8String;
-                    return std::make_shared<ofImage>();
-                }
-                CVPixelBufferRef pixelBuffer = request.results.firstObject.pixelBuffer;
-                return pixelBufferToOfImage(pixelBuffer);
-            }
-        };
+            return createResult(request);
+        }
         
 #include "details/detect_impl.inl"
 
-        Request *TargetRequest::createRequest() const
-        { return ofx::Vision::createRequest(settings); }
+        Target::Request *Target::createRequest() const {
+            auto request = OFX_VISION_AUTORELEASE([[Target::Request alloc] init]);
+            request.qualityLevel = conv(settings.qualityLevel);
+            request.outputPixelFormat = kCVPixelFormatType_OneComponent8;
+            return request;
+        }
         
-        TargetRequest::ResultType TargetRequest::createResult(Request *request) const {
+        Target::ResultType Target::createResult(void *req) const {
+            Target::Request *request = (Target::Request *)req;
             CVPixelBufferRef pixelBuffer = request.results.firstObject.pixelBuffer;
             return pixelBufferToOfImage(pixelBuffer);
         }

@@ -15,47 +15,33 @@
 
 namespace ofx {
     namespace Vision {
-        using TargetRequest = DetectHumanHandPose;
+        using Target = DetectHumanHandPose;
         
-        namespace {
-            VNDetectHumanHandPoseRequest *createRequest(const TargetRequest::Settings &settings)
-            {
-                VNDetectHumanHandPoseRequest *request = [[VNDetectHumanHandPoseRequest alloc] init];
-                request.maximumHandCount = settings.maximumHandCount;
-                OFX_VISION_AUTORELEASE(request);
-                return request;
+        Target::ResultType Target::detectWithCIImage(CIImage *image) {
+            auto request = createRequest();
+            NSError *err = nil;
+            [handler performRequests:@[request]
+                           onCIImage:image
+                         orientation:kCGImagePropertyOrientationUp
+                               error:&err];
+            if(err) {
+                ofLogError("ofxVisionPersonSegmentation") << err.description.UTF8String;
+                return {};
             }
-            
-            TargetRequest::ResultType detectWithCIImage(void *handler_impl,
-                                                        const TargetRequest::Settings &settings,
-                                                        CIImage *image)
-            {
-                auto handler = (VNSequenceRequestHandler *)handler_impl;
-                auto request = createRequest(settings);
-                NSError *err = nil;
-                [handler performRequests:@[request]
-                               onCIImage:image
-                             orientation:kCGImagePropertyOrientationUp
-                                   error:&err];
-                if(err) {
-                    ofLogError("ofxVisionPersonSegmentation") << err.description.UTF8String;
-                    return {};
-                }
-                TargetRequest::ResultType results;
-                for(VNHumanHandPoseObservation *hand in request.results) {
-                    results.push_back(toOF(hand));
-                }
-                return results;
-            }
-        };
+            return createResult(request);
+        }
         
 #include "details/detect_impl.inl"
 
-        Request *TargetRequest::createRequest() const
-        { return ofx::Vision::createRequest(settings); }
+        Target::Request *Target::createRequest() const {
+            auto request = OFX_VISION_AUTORELEASE([[Target::Request alloc] init]);
+            request.maximumHandCount = settings.maximumHandCount;
+            return request;
+        }
         
-        TargetRequest::ResultType TargetRequest::createResult(Request *request) const {
-            TargetRequest::ResultType results;
+        Target::ResultType Target::createResult(void *req) const {
+            Target::Request *request = (Target::Request *)req;
+            Target::ResultType results;
             for(VNHumanHandPoseObservation *hand in request.results) {
                 results.push_back(toOF(hand));
             }

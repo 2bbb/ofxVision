@@ -28,6 +28,13 @@
 #define OFX_VISION_VERSION_CHECK_X(MAJOR, MINOR) (MAC_OS_X_VERSION_##MAJOR##_##MINOR <= OFX_VISION_MAC_OS_VERSION_MIN_REQUIRED)
 #define OFX_VISION_VERSION_CHECK(MAJOR, MINOR) (MAC_OS_VERSION_##MAJOR##_##MINOR <= OFX_VISION_MAC_OS_VERSION_MIN_REQUIRED)
 
+#if __OBJC__
+#   import <Vision/Vision.h>
+#   define OFX_VISION_OBJC_CLASS(Klass) Klass
+#else
+#   define OFX_VISION_OBJC_CLASS(Klass) void
+#endif
+
 namespace ofx {
     namespace Vision {
         std::shared_ptr<ofImage> pixelBufferToOfImage(CVPixelBufferRef pixelBuffer);
@@ -35,7 +42,10 @@ namespace ofx {
         ofTexture pixelBufferToOfFloatTexture(CVPixelBufferRef pixelBuffer);
         std::shared_ptr<ofFloatImage> pixelBuffer2fToOfFloatImage(CVPixelBufferRef pixelBuffer);
         
-        CGImageRef ofBaseHasPixelsToCGImageRef(const ofBaseHasPixels &pix);
+        CGImageRef ofPixelsToCGImageRef(const ofPixels &pix);
+        inline CGImageRef ofBaseHasPixelsToCGImageRef(const ofBaseHasPixels &pix) {
+            return ofPixelsToCGImageRef(pix.getPixels());
+        }
         namespace {
             glm::vec2 toOF(CGPoint p) { return { p.x, 1.0f - p.y }; }
             ofRectangle toOF(CGRect r) {
@@ -45,5 +55,17 @@ namespace ofx {
                                    r.size.height);
             };
         };
+        
+        using ofxVisionCIImage = OFX_VISION_OBJC_CLASS(CIImage);
+        
+        using Handler = OFX_VISION_OBJC_CLASS(VNSequenceRequestHandler);
+        using BaseRequest = OFX_VISION_OBJC_CLASS(VNRequest);
+        using BaseObservation = OFX_VISION_OBJC_CLASS(VNObservation);
+        
+        ofxVisionCIImage *toCIImage(const ofBaseHasPixels &pix);
+        ofxVisionCIImage *toCIImage(CVPixelBufferRef pixelBuffer);
+        ofxVisionCIImage *toCIImage(IOSurfaceRef surface);
+        
+        Handler *createHandler();
     }; // namespace Vision
 }; // namespace Vision

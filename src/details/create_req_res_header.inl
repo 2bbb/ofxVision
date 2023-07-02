@@ -5,4 +5,7 @@
 //
 
             Request *createRequest() const;
-            ResultType createResult(Request *result) const;
+            ResultType createResult(void *result) const;
+
+            template <typename ... Detectors>
+            friend struct MultipleDetector;

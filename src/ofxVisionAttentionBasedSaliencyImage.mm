@@ -16,44 +16,29 @@
 
 namespace ofx {
     namespace Vision {
-        using TargetRequest = AttentionBasedSaliencyImage;
+        using Target = AttentionBasedSaliencyImage;
         
-        namespace {
-            Request *createRequest(const TargetRequest::Settings &settings)
-            {
-                auto request = [[VNGenerateAttentionBasedSaliencyImageRequest alloc] init];
-                OFX_VISION_AUTORELEASE(request);
-                return request;
-            }
-            
-            TargetRequest::ResultType detectWithCIImage(void *handler_impl,
-                                                       const TargetRequest::Settings &settings,
-                                                       CIImage *image)
-            {
-                auto handler = (VNSequenceRequestHandler *)handler_impl;
-                auto request = createRequest(settings);
-                
-                NSError *err = nil;
-                [handler performRequests:@[request]
-                               onCIImage:image
-                             orientation:kCGImagePropertyOrientationUp
-                                   error:&err];
-                AttentionBasedSaliencyImage::ResultType result;
-                if(err) {
-                    ofLogError("AttentionBasedSaliencyImage") << err.description.UTF8String;
-                    return result;
-                }
-                return toOF(request.results.firstObject);
-            }
-        };
+        Target::ResultType Target::detectWithCIImage(CIImage *image) {
+            auto request = createRequest();
+            NSError *err = nil;
+            [handler performRequests:@[request]
+                           onCIImage:image
+                         orientation:kCGImagePropertyOrientationUp
+                               error:&err];
+            return createResult(request);
+        }
         
 #include "details/detect_impl.inl"
         
-        Request *TargetRequest::createRequest() const
-        { return ofx::Vision::createRequest(settings); }
+        Target::Request *Target::createRequest() const {
+            auto request = OFX_VISION_AUTORELEASE([[Target::Request alloc] init]);
+            return request;
+        }
         
-        TargetRequest::ResultType TargetRequest::createResult(Request *request) const
-        { return toOF(request.results.firstObject); }
+        Target::ResultType Target::createResult(void *req) const {
+            Target::Request *request = (Target::Request *)req;
+            return toOF(request.results.firstObject);
+        }
     }; // namespace Vision
 }; // namespace ofx
 

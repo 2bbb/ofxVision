@@ -15,17 +15,12 @@
 #   undef Request
 #endif
 
-#if __OBJC__
-#   define Request VNGenerateAttentionBasedSaliencyImageRequest
-#else
-#   define Request void
-#endif
-
 namespace ofx {
     namespace Vision {
         struct AttentionBasedSaliencyImage : Base {
             using ResultType = Observation::SaliencyImage;
-            
+            using Request = OFX_VISION_OBJC_CLASS(VNGenerateAttentionBasedSaliencyImageRequest);
+
             struct Settings {};
             
 #include "details/detect_header.inl"

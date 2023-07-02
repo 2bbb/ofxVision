@@ -13,17 +13,12 @@
 #   undef Request
 #endif
 
-#if __OBJC__
-#   define Request VNDetectFaceLandmarksRequest
-#else
-#   define Request void
-#endif
-
 namespace ofx {
     namespace Vision {
         struct DetectFaceLandmarks : Base {
             using ResultType = std::vector<Observation::Face>;
-            
+            using Request = OFX_VISION_OBJC_CLASS(VNDetectFaceLandmarksRequest);
+
             struct Settings {
                 
             };

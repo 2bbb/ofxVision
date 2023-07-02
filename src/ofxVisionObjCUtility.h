@@ -40,13 +40,6 @@
 namespace ofx {
     namespace Vision {
         namespace {
-            CIImage *toCIImage(const ofBaseHasPixels &pix)
-            { return [CIImage imageWithCGImage:ofBaseHasPixelsToCGImageRef(pix)]; };
-            CIImage *toCIImage(CVPixelBufferRef pixelBuffer)
-            { return [CIImage imageWithCVPixelBuffer:pixelBuffer]; };
-            CIImage *toCIImage(IOSurfaceRef surface)
-            { return [CIImage imageWithIOSurface:surface]; };
-            
             Observation::Rectangle toOF(VNRectangleObservation *r) {
                 Observation::Rectangle rect;
                 rect.uuid = r.uuid.UUIDString.UTF8String;
