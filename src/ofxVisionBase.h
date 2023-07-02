@@ -37,13 +37,17 @@ namespace ofx {
         
         template <typename ... Detectors>
         struct MultipleDetector {
+            using DetectorsTuple = std::tuple<Detectors ...>;
+            using Requests = std::tuple<typename Detectors::Request * ...>;
+            using Results = std::tuple<typename Detectors::ResultType ...>;
+
             void setup() {
                 handler = createHandler();
             }
             
             bool detectWithCIImage(ofxVisionCIImage *image)
             {
-                std::tuple<typename Detectors::Request * ...> requests;
+                Requests requests;
                 std::vector<BaseRequest *> requests_vec;
                 create_requests(requests, requests_vec);
                 
@@ -71,7 +75,7 @@ namespace ofx {
                     n < sizeof...(Detectors),
                     const typename std::tuple_element<
                         n,
-                        std::tuple<typename Detectors::ResultType ...>
+                        Results
                     >::type &
                 >::type
             {
@@ -80,7 +84,8 @@ namespace ofx {
                                     
         protected:
             template <std::size_t i = 0>
-            auto create_requests(std::tuple<typename Detectors::Request * ...> &requests, std::vector<BaseRequest *> &vs)
+            auto create_requests(Requests &requests,
+                                 std::vector<BaseRequest *> &vs)
                 -> typename std::enable_if<
                     i < sizeof...(Detectors) - 1,
                     void
@@ -92,7 +97,7 @@ namespace ofx {
             }
 
             template <std::size_t i>
-            auto create_requests(std::tuple<typename Detectors::Request * ...> &requests,
+            auto create_requests(Requests &requests,
                                  std::vector<BaseRequest *> &vs)
                 -> typename std::enable_if<
                     i == sizeof...(Detectors) - 1,
@@ -104,7 +109,7 @@ namespace ofx {
             }
 
             template <std::size_t i = 0>
-            auto set_results(std::tuple<typename Detectors::Request * ...> &requests)
+            auto set_results(Requests &requests)
                 -> typename std::enable_if<
                     i < sizeof...(Detectors) - 1,
                     void
@@ -115,7 +120,7 @@ namespace ofx {
             }
 
             template <std::size_t i>
-            auto set_results(std::tuple<typename Detectors::Request * ...> &requests)
+            auto set_results(Requests &requests)
                 -> typename std::enable_if<
                     i == sizeof...(Detectors) - 1,
                     void
@@ -124,8 +129,8 @@ namespace ofx {
                 std::get<i>(results) = std::get<i>(detectors).createResult(std::get<i>(requests));
             }
             
-            std::tuple<Detectors ...> detectors;
-            std::tuple<typename Detectors::ResultType ...> results;
+            DetectorsTuple detectors;
+            Results results;
             Handler *handler;
         };
     };
