@@ -52,6 +52,7 @@
 		94C1E02E202621D988C24DD3 /* detect_impl.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = detect_impl.inl; path = ../src/details/detect_impl.inl; sourceTree = SOURCE_ROOT; };
 		954E92BC2A5074AD00D70F8C /* detect_header.inl */ = {isa = PBXFileReference; lastKnownFileType = text; name = detect_header.inl; path = ../src/details/detect_header.inl; sourceTree = "<group>"; };
 		954E92BD2A50755B00D70F8C /* create_req_res_header.inl */ = {isa = PBXFileReference; lastKnownFileType = text; name = create_req_res_header.inl; path = ../src/details/create_req_res_header.inl; sourceTree = "<group>"; };
+		954E92C02A52213A00D70F8C /* type_traits.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = type_traits.hpp; path = ../src/details/type_traits.hpp; sourceTree = "<group>"; };
 		957656398AF4DE9CAE70EA49 /* ofxVisionDetectRectangles.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxVisionDetectRectangles.h; path = ../../ofxVision/src/ofxVisionDetectRectangles.h; sourceTree = SOURCE_ROOT; };
 		97CB0764C55EE6236E126631 /* ofxVisionAttentionBasedSaliencyImage.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxVisionAttentionBasedSaliencyImage.h; path = ../../ofxVision/src/ofxVisionAttentionBasedSaliencyImage.h; sourceTree = SOURCE_ROOT; };
 		9E0416ED116AABEEE8CA2852 /* ofxVisionObjCUtility.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxVisionObjCUtility.h; path = ../../ofxVision/src/ofxVisionObjCUtility.h; sourceTree = SOURCE_ROOT; };
@@ -328,6 +329,7 @@
 				94C1E02E202621D988C24DD3 /* detect_impl.inl */,
 				954E92BC2A5074AD00D70F8C /* detect_header.inl */,
 				954E92BD2A50755B00D70F8C /* create_req_res_header.inl */,
+				954E92C02A52213A00D70F8C /* type_traits.hpp */,
 			);
 			name = details;
 			sourceTree = "<group>";

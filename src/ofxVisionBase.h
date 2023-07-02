@@ -9,6 +9,8 @@
 #include "ofxVisionObservation.h"
 #include "ofxVisionUtility.h"
 
+#include "details/type_traits.hpp"
+
 #include "ofBaseTypes.h"
 
 #include <IOSurface/IOSurface.h>
@@ -45,19 +47,23 @@ namespace ofx {
                 handler = createHandler();
             }
             
-            bool detectWithCIImage(ofxVisionCIImage *image)
+            template <std::size_t ... is>
+            bool detectWithCIImage(ofxVisionCIImage *image, index_sequence<is ...> &&)
             {
-                Requests requests;
-                std::vector<BaseRequest *> requests_vec;
-                create_requests(requests, requests_vec);
+                Requests requests = { std::get<is>(detectors).createRequest() ... };
+                std::vector<BaseRequest *> requests_vec = { (BaseRequest *)std::get<is>(requests) ... };
                 
                 auto success = detectMultiple(handler, requests_vec, image);
                 if(!success) {
                     ofLogError(__func__) << "What";
                     return false;
                 }
-                set_results(requests);
+                auto && _ = { (std::get<is>(results) = std::get<is>(detectors).createResult(std::get<is>(requests)), 0) ... };
                 return true;
+            }
+            bool detectWithCIImage(ofxVisionCIImage *image) {
+                return detectWithCIImage(image,
+                                         make_index_sequence<sizeof...(Detectors)>{});
             }
             bool detect(const ofBaseHasPixels &pix) {
                 return detectWithCIImage(toCIImage(pix));
@@ -78,56 +84,9 @@ namespace ofx {
                         Results
                     >::type &
                 >::type
-            {
-                return std::get<n>(results);
-            }
+            { return std::get<n>(results); }
                                     
         protected:
-            template <std::size_t i = 0>
-            auto create_requests(Requests &requests,
-                                 std::vector<BaseRequest *> &vs)
-                -> typename std::enable_if<
-                    i < sizeof...(Detectors) - 1,
-                    void
-                >::type
-            {
-                std::get<i>(requests) = std::get<i>(detectors).createRequest();
-                vs.push_back((BaseRequest *)std::get<i>(requests));
-                create_requests<i + 1>(requests, vs);
-            }
-
-            template <std::size_t i>
-            auto create_requests(Requests &requests,
-                                 std::vector<BaseRequest *> &vs)
-                -> typename std::enable_if<
-                    i == sizeof...(Detectors) - 1,
-                    void
-                >::type
-            {
-                std::get<i>(requests) = std::get<i>(detectors).createRequest();
-                vs.push_back((BaseRequest *)std::get<i>(requests));
-            }
-
-            template <std::size_t i = 0>
-            auto set_results(Requests &requests)
-                -> typename std::enable_if<
-                    i < sizeof...(Detectors) - 1,
-                    void
-                >::type
-            {
-                std::get<i>(results) = std::get<i>(detectors).createResult(std::get<i>(requests));
-                set_results<i + 1>(requests);
-            }
-
-            template <std::size_t i>
-            auto set_results(Requests &requests)
-                -> typename std::enable_if<
-                    i == sizeof...(Detectors) - 1,
-                    void
-                >::type
-            {
-                std::get<i>(results) = std::get<i>(detectors).createResult(std::get<i>(requests));
-            }
             
             DetectorsTuple detectors;
             Results results;
