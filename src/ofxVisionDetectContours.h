@@ -39,14 +39,15 @@ namespace ofx {
             { return settings.detectsDarkOnLight; }
             
         protected:
-            Base::ResultType detectWithCIImage(ofxVisionCIImage *image) override;
+            Settings settings;
+            
+            // common
             Request *createRequest() const;
-            ResultType createResult(void *result) const;
+            ResultType createResult(void *result) const override;
+            ResultType detectWithCIImage(ofxVisionCIImage *image) override;
 
             template <typename ... Detectors>
             friend struct MultipleDetector;
-            
-            Settings settings;
         };
     }; // namespace Vision
 }; // namespace ofx

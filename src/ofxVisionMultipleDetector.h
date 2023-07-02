@@ -1,13 +1,11 @@
 //
 //  ofxVisionMultipleDetector.h
-//  example
 //
 //  Created by 2bit on 2023/07/03.
 //
 
 #pragma once
 
-#include "ofxVisionObservation.h"
 #include "ofxVisionUtility.h"
 
 #include "details/type_traits.hpp"
@@ -18,7 +16,7 @@
 #include <CoreVideo/CVPixelBuffer.h>
 
 #if __OBJC__
-#import <Vision/Vision.h>
+#   import <Vision/Vision.h>
 #endif
 
 #include <memory>
@@ -81,7 +79,6 @@ namespace ofx {
             { return std::get<n>(results); }
                                     
         protected:
-            
             DetectorsTuple detectors;
             Results results;
             Handler *handler;

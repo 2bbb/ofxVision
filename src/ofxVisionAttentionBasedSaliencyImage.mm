@@ -1,6 +1,5 @@
 //
 //  ofxVisionAttentionBasedSaliencyImage.m
-//  example
 //
 //  Created by 2bit on 2023/06/30.
 //

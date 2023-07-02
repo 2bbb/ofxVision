@@ -47,11 +47,6 @@ namespace ofx {
             return createResult(request);
         }
         
-        void Target::releaseImage() {
-            CIImage *baseImage = (CIImage *)settings.baseImage;
-            if(settings.baseImage) OFX_VISION_RELEASE((CIImage *)baseImage);
-        }
-        
         void Target::setBaseImage(ofxVisionCIImage *image) {
             releaseImage();
             settings.baseImage = OFX_VISION_RETAIN((CIImage *)image);

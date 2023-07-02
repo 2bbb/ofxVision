@@ -1,6 +1,5 @@
 //
 //  ofxVisionDetectRectangles.mm
-//  example
 //
 //  Created by 2bit on 2023/07/01.
 //

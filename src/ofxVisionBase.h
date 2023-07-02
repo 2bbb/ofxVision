@@ -6,10 +6,8 @@
 
 #pragma once
 
-#include "ofxVisionObservation.h"
 #include "ofxVisionUtility.h"
-
-#include "details/type_traits.hpp"
+#include "ofxVisionObservation.h"
 
 #include "ofBaseTypes.h"
 
@@ -20,17 +18,12 @@
 #   import <Vision/Vision.h>
 #endif
 
-#include <memory>
-#include <vector>
-#include <tuple>
-
 namespace ofx {
     namespace Vision {
         template <typename Result>
         struct Base {
             using ResultType = Result;
             
-            virtual ResultType detectWithCIImage(ofxVisionCIImage *image) = 0;
             ResultType detect(const ofPixels &pix) {
                 return detectWithCIImage(toCIImage(pix));
             }
@@ -51,6 +44,8 @@ namespace ofx {
                 handler = createHandler();
             }
         protected:
+            virtual ResultType detectWithCIImage(ofxVisionCIImage *image) = 0;
+            virtual ResultType createResult(void *result) const = 0;
             Handler *handler;
         };
         

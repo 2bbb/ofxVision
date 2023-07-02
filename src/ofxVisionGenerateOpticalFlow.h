@@ -48,15 +48,19 @@ namespace ofx {
             { setBaseImage(toCIImage(pix)); };
 
         protected:
-            Base::ResultType detectWithCIImage(ofxVisionCIImage *image) override;
+            Settings settings;
+            void releaseImage() {
+                if(settings.baseImage) objc_release(settings.baseImage);
+                settings.baseImage = nullptr;
+            }
+
+            // common
             Request *createRequest() const;
-            ResultType createResult(void *result) const;
+            ResultType createResult(void *result) const override;
+            ResultType detectWithCIImage(ofxVisionCIImage *image) override;
 
             template <typename ... Detectors>
             friend struct MultipleDetector;
-
-            void releaseImage();
-            Settings settings;
         };
     }; // namespace Vision
 }; // namespace ofx
