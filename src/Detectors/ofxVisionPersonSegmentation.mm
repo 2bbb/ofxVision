@@ -29,10 +29,12 @@ namespace ofx {
         }
         
         BaseRequest *Target::createRequest() const {
-            auto request = OFX_VISION_AUTORELEASE([[Target::Request alloc] init]);
+            auto request = [[Target::Request alloc] init];
+            
             request.qualityLevel = conv(settings.qualityLevel);
             request.outputPixelFormat = kCVPixelFormatType_OneComponent8;
-            return request;
+            
+            return OFX_VISION_AUTORELEASE(request);
         }
         
         Target::ResultType Target::createResult(void *req) const {

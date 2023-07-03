@@ -18,9 +18,11 @@ namespace ofx {
         using Target = DetectHumanHandPose;
         
         BaseRequest *Target::createRequest() const {
-            auto request = OFX_VISION_AUTORELEASE([[Target::Request alloc] init]);
+            auto request = [[Target::Request alloc] init];
+            
             request.maximumHandCount = settings.maximumHandCount;
-            return request;
+            
+            return OFX_VISION_AUTORELEASE(request);
         }
         
         Target::ResultType Target::createResult(void *req) const {

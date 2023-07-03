@@ -17,8 +17,9 @@ namespace ofx {
         using Target = ObjectnessBasedSaliencyImage;
         
         BaseRequest *Target::createRequest() const {
-            auto request = OFX_VISION_AUTORELEASE([[Target::Request alloc] init]);
-            return request;
+            auto request = [[Target::Request alloc] init];
+            
+            return OFX_VISION_AUTORELEASE(request);
         }
         
         Target::ResultType Target::createResult(void *req) const {

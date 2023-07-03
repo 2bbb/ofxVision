@@ -16,13 +16,13 @@ namespace ofx {
         using Target = DetectFaceLandmarks;
         
         BaseRequest *Target::createRequest() const {
-            auto request = OFX_VISION_AUTORELEASE([[VNDetectFaceLandmarksRequest alloc] init]);
-            return request;
+            auto request = [[VNDetectFaceLandmarksRequest alloc] init];
+            
+            return OFX_VISION_AUTORELEASE(request);
         }
         
         Target::ResultType Target::createResult(void *req) const {
             Target::Request *request = (Target::Request *)req;
-            ofLogNotice(__func__) << request;
             
             Target::ResultType result;
             result.resize(request.results.count);

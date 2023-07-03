@@ -17,11 +17,10 @@ namespace ofx {
     namespace Vision {
         using Target = DetectHumanBodyPose;
         
-        BaseRequest *Target::createRequest() const
-        {
-            auto request = OFX_VISION_AUTORELEASE([[Target::Request alloc] init]);
+        BaseRequest *Target::createRequest() const {
+            auto request = [[Target::Request alloc] init];
             
-            return request;
+            return OFX_VISION_AUTORELEASE(request);
         }
         
         Target::ResultType Target::createResult(void *req) const {

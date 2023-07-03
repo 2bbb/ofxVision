@@ -16,7 +16,7 @@ namespace ofx {
         using Target = DetectRectangles;
         
         BaseRequest *Target::createRequest() const {
-            auto request = OFX_VISION_AUTORELEASE([[Target::Request alloc] init]);
+            auto request = [[Target::Request alloc] init];
             
             request.minimumAspectRatio = settings.minimumAspectRatio;
             request.maximumAspectRatio = settings.maximumAspectRatio;
@@ -25,7 +25,7 @@ namespace ofx {
             request.minimumConfidence = settings.minimumConfidence;
             request.maximumObservations = settings.maximumObservations;
             
-            return request;
+            return OFX_VISION_AUTORELEASE(request);
         }
         
         Target::ResultType Target::createResult(void *req) const {

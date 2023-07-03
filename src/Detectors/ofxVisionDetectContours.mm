@@ -17,11 +17,13 @@ namespace ofx {
         using Target = DetectContours;
 
         BaseRequest *Target::createRequest() const {
-            auto request = OFX_VISION_AUTORELEASE([[VNDetectContoursRequest alloc] init]);
+            auto request = [[VNDetectContoursRequest alloc] init];
+            
             request.contrastAdjustment = settings.contrastAdjustment;
             request.contrastPivot = settings.contrastPivot < 0.0f ? nil : @(settings.contrastPivot);
             request.detectsDarkOnLight = settings.detectsDarkOnLight;
-            return request;
+            
+            return OFX_VISION_AUTORELEASE(request);
         }
         
         Target::ResultType Target::createResult(void *req) const {

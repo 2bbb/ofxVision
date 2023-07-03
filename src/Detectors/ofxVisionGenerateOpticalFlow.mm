@@ -41,9 +41,10 @@ namespace ofx {
         BaseRequest *Target::createRequest() const {
             auto request = [[Target::Request alloc] initWithTargetedCIImage:(CIImage *)settings.baseImage
                                                                                                           options:@{}];
+            
             request.computationAccuracy = conv(settings.accuracyLevel);
-            OFX_VISION_AUTORELEASE(request);
-            return request;
+            
+            return OFX_VISION_AUTORELEASE(request);
         }
         
         Target::ResultType Target::createResult(void *req) const {
