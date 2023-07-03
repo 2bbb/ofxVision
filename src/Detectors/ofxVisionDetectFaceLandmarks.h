@@ -13,9 +13,7 @@ namespace ofx {
         struct DetectFaceLandmarks : Base<std::vector<Observation::Face>> {
             using Request = OFX_VISION_OBJC_CLASS(VNDetectFaceLandmarksRequest);
 
-            struct Settings {
-                
-            };
+            struct Settings {};
             
         protected:
             Settings settings;

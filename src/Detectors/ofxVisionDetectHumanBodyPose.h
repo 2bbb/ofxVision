@@ -15,12 +15,6 @@ namespace ofx {
         struct DetectHumanBodyPose : Base<std::vector<Observation::BodyPose>> {
             using Request = OFX_VISION_OBJC_CLASS(VNDetectHumanBodyPoseRequest);
 
-            enum class QualityLevel {
-                Fast,
-                Balanced,
-                Accurate,
-            };
-            
             struct Settings {};
             
         protected:

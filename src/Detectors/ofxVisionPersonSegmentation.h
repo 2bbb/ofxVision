@@ -47,10 +47,13 @@ namespace ofx {
             template <typename ... Detectors>
             friend struct MultipleDetector;
         };
+        
+        using PersonSegmentationQualityLevel = PersonSegmentation::QualityLevel;
     }; // namespace Vision
 }; // namespace ofx
 
 using ofxVisionPersonSegmentation = ofx::Vision::PersonSegmentation;
+using ofxVisionPersonSegmentationQualityLevel = ofx::Vision::PersonSegmentationQualityLevel;
 
 #else
 #   warning ofxVisionPersonSegmentation need macOS 12.0~

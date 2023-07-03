@@ -63,10 +63,13 @@ namespace ofx {
             template <typename ... Detectors>
             friend struct MultipleDetector;
         };
+        
+        using GenerateOpticalFlowComputationAccuracyLevel = GenerateOpticalFlow::ComputationAccuracyLevel;
     }; // namespace Vision
 }; // namespace ofx
 
 using ofxVisionGenerateOpticalFlow = ofx::Vision::GenerateOpticalFlow;
+using ofxVisionGenerateOpticalFlowComputationAccuracyLevel = ofx::Vision::GenerateOpticalFlowComputationAccuracyLevel;
 
 #else
 #   warning ofxVisionGenerateOpticalFlow need macOS 11.0~
