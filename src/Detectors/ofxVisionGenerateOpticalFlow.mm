@@ -32,28 +32,13 @@ namespace ofx {
             }
         }
         
-        Target::ResultType Target::detectWithCIImage(ofxVisionCIImage *image) {
-            auto request = createRequest();
-            
-            NSError *err = nil;
-            auto res = [handler performRequests:@[ request ]
-                                      onCIImage:(CIImage *)image
-                                    orientation:kCGImagePropertyOrientationUp
-                                          error:&err];
-            if(err) {
-                ofLogError("ofxGenerateOpticalFlow") << err.description.UTF8String;
-                return {};
-            }
-            return createResult(request);
-        }
-        
         void Target::setBaseImage(ofxVisionCIImage *image) {
             releaseImage();
             settings.baseImage = OFX_VISION_RETAIN((CIImage *)image);
         }
 
         
-        Target::Request *Target::createRequest() const {
+        BaseRequest *Target::createRequest() const {
             auto request = [[Target::Request alloc] initWithTargetedCIImage:(CIImage *)settings.baseImage
                                                                                                           options:@{}];
             request.computationAccuracy = conv(settings.accuracyLevel);

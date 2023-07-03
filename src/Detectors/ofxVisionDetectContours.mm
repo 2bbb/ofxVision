@@ -16,21 +16,7 @@ namespace ofx {
     namespace Vision {
         using Target = DetectContours;
 
-        Target::ResultType Target::detectWithCIImage(ofxVisionCIImage *image) {
-            auto request = createRequest();
-            NSError *err = nil;
-            [handler performRequests:@[request]
-                           onCIImage:(CIImage *)image
-                         orientation:kCGImagePropertyOrientationUp
-                               error:&err];
-            if(err) {
-                ofLogError("ofxVisionDetectContours") << err.description.UTF8String;
-                return {};
-            }
-            return createResult(request);
-        }
-        
-        Target::Request *Target::createRequest() const {
+        BaseRequest *Target::createRequest() const {
             auto request = OFX_VISION_AUTORELEASE([[VNDetectContoursRequest alloc] init]);
             request.contrastAdjustment = settings.contrastAdjustment;
             request.contrastPivot = settings.contrastPivot < 0.0f ? nil : @(settings.contrastPivot);

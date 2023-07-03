@@ -28,21 +28,7 @@ namespace ofx {
             }
         }
         
-        Target::ResultType Target::detectWithCIImage(ofxVisionCIImage *image) {
-            auto request = createRequest();
-            NSError *err = nil;
-            [handler performRequests:@[request]
-                           onCIImage:(CIImage *)image
-                         orientation:kCGImagePropertyOrientationUp
-                               error:&err];
-            if(err) {
-                ofLogError("ofxVisionPersonSegmentation") << err.description.UTF8String;
-                return std::make_shared<ofImage>();
-            }
-            return createResult(request);
-        }
-        
-        Target::Request *Target::createRequest() const {
+        BaseRequest *Target::createRequest() const {
             auto request = OFX_VISION_AUTORELEASE([[Target::Request alloc] init]);
             request.qualityLevel = conv(settings.qualityLevel);
             request.outputPixelFormat = kCVPixelFormatType_OneComponent8;

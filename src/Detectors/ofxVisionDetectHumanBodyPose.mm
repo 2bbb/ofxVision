@@ -17,21 +17,7 @@ namespace ofx {
     namespace Vision {
         using Target = DetectHumanBodyPose;
         
-        Target::ResultType Target::detectWithCIImage(ofxVisionCIImage *image) {
-            auto request = createRequest();
-            NSError *err = nil;
-            [handler performRequests:@[request]
-                           onCIImage:(CIImage *)image
-                         orientation:kCGImagePropertyOrientationUp
-                               error:&err];
-            if(err) {
-                ofLogError("ofxVisionDetectBodyPose") << err.description.UTF8String;
-                return {};
-            }
-            return createResult(request);
-        }
-        
-        Target::Request *Target::createRequest() const
+        BaseRequest *Target::createRequest() const
         {
             auto request = OFX_VISION_AUTORELEASE([[Target::Request alloc] init]);
             

@@ -42,9 +42,10 @@ namespace ofx {
             Settings settings;
             
             // common
-            Request *createRequest() const;
+            std::string getName() const override
+            { return "ofxVisionDetectContours"; }
+            BaseRequest *createRequest() const override;
             ResultType createResult(void *result) const override;
-            ResultType detectWithCIImage(ofxVisionCIImage *image) override;
 
             template <typename ... Detectors>
             friend struct MultipleDetector;

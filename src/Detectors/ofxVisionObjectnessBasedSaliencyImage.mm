@@ -16,23 +16,7 @@ namespace ofx {
     namespace Vision {
         using Target = ObjectnessBasedSaliencyImage;
         
-        Target::ResultType Target::detectWithCIImage(ofxVisionCIImage *image) {
-            auto request = createRequest();
-            
-            NSError *err = nil;
-            [handler performRequests:@[request]
-                           onCIImage:(CIImage *)image
-                         orientation:kCGImagePropertyOrientationUp
-                               error:&err];
-            Target::ResultType result;
-            if(err) {
-                ofLogError("ObjectnessBasedSaliencyImage") << err.description.UTF8String;
-                return result;
-            }
-            return createResult(request);
-        }
-        
-        Target::Request *Target::createRequest() const {
+        BaseRequest *Target::createRequest() const {
             auto request = OFX_VISION_AUTORELEASE([[Target::Request alloc] init]);
             return request;
         }

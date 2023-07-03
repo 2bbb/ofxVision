@@ -20,6 +20,11 @@
 
 namespace ofx {
     namespace Vision {
+        bool runRequest(void *handler,
+                        void *request,
+                        ofxVisionCIImage *image,
+                        const std::string &name);
+        
         template <typename Result>
         struct Base {
             using ResultType = Result;
@@ -36,7 +41,7 @@ namespace ofx {
             ResultType detect(CVPixelBufferRef pix) {
                 return detectWithCIImage(toCIImage(pix));
             }
-
+            
             virtual ~Base() {
                 objc_release(handler);
             }
@@ -44,8 +49,15 @@ namespace ofx {
                 handler = createHandler();
             }
         protected:
-            virtual ResultType detectWithCIImage(ofxVisionCIImage *image) = 0;
+            virtual std::string getName() const = 0;
+            virtual BaseRequest *createRequest() const = 0;
             virtual ResultType createResult(void *result) const = 0;
+            
+            ResultType detectWithCIImage(ofxVisionCIImage *image) {
+                auto request = createRequest();
+                runRequest(handler, request, image, getName());
+                return createResult(request);
+            };
             Handler *handler;
         };
         
