@@ -55,7 +55,7 @@ public:
         
 #if OFX_VISION_VERSION_CHECK(12, 0)
         person.setup();
-        person.setQualityLevel(ofxVisionPersonSegmentation::QualityLevel::Accurate);
+        person.setQualityLevel(ofxVisionPersonSegmentationQualityLevel::Balanced);
 #endif
 #if OFX_VISION_VERSION_CHECK_X(10, 15)
         att_saliency.setup();
@@ -248,20 +248,27 @@ public:
     void drawBodyTracking() {
         const glm::vec2 s{ofGetWidth(), ofGetHeight()};
         auto &bodies = bodypose.result;
+        ofSetColor(255, 0, 0);
         for(auto &&body : bodies) {
-            const float size = 3.0f;
+            const float size = 10.0f;
             for(auto i = 0; i < body.head.size(); ++i) {
-                ofDrawCircle(body.head[i].position * s, size);
+                if(0.0 < body.head[i].confidence) {
+                    ofDrawCircle(body.head[i].position * s, size);
+                }
             }
-            ofDrawCircle(body.waist.position * s, size);
+            if(0.0 < body.waist.confidence) ofDrawCircle(body.waist.position * s, size);
             for(auto i = 0; i < body.arms.size(); ++i) {
                 for(auto j = 0; j < body.arms[i].size(); ++j) {
-                    ofDrawCircle(body.arms[i][j].position * s, size);
+                    if(0.0 < body.arms[i][j].confidence) {
+                        ofDrawCircle(body.arms[i][j].position * s, size);
+                    }
                 }
             }
             for(auto i = 0; i < body.legs.size(); ++i) {
                 for(auto j = 0; j < body.legs[i].size(); ++j) {
-                    ofDrawCircle(body.legs[i][j].position * s, size);
+                    if(0.0 < body.legs[i][j].confidence) {
+                        ofDrawCircle(body.legs[i][j].position * s, size);
+                    }
                 }
             }
         }
