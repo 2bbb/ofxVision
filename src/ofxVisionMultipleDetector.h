@@ -68,16 +68,33 @@ namespace ofx {
             }
             
             template <std::size_t n>
+            auto getDetector()
+                -> typename std::enable_if<
+                    n < sizeof...(Detectors),
+                    typename std::tuple_element<n, DetectorsTuple>::type &
+                >::type
+            {
+                return std::get<n>(detectors);
+            }
+            
+            template <std::size_t n>
+            auto getDetector() const
+                -> typename std::enable_if<
+                    n < sizeof...(Detectors),
+                    const typename std::tuple_element<n, DetectorsTuple>::type &
+                >::type
+            {
+                return std::get<n>(detectors);
+            }
+            
+            template <std::size_t n>
             auto getResult() const
                 -> typename std::enable_if<
                     n < sizeof...(Detectors),
-                    const typename std::tuple_element<
-                        n,
-                        Results
-                    >::type &
+                    const typename std::tuple_element< n, Results>::type &
                 >::type
             { return std::get<n>(results); }
-                                    
+            
         protected:
             DetectorsTuple detectors;
             Results results;

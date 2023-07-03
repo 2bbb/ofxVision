@@ -126,7 +126,7 @@ namespace ofx {
         {
             NSError *err = nil;
             auto p = [body recognizedPointForJointName:name error:&err];
-            if(p) point = toOF(p);
+            if(p && err == nil) point = toOF(p);
             else point.confidence = -1.0f;
         }
 #endif

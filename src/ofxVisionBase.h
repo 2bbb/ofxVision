@@ -55,8 +55,10 @@ namespace ofx {
             
             ResultType detectWithCIImage(ofxVisionCIImage *image) {
                 auto request = createRequest();
-                runRequest(handler, request, image, getName());
-                return createResult(request);
+                if(runRequest(handler, request, image, getName())) {
+                    return createResult(request);
+                }
+                return {};
             };
             Handler *handler;
         };
