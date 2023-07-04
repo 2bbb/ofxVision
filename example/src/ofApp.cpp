@@ -45,9 +45,11 @@ class ofApp : public ofBaseApp {
 #endif
     
     ofShader opticalShader;
+    ofShader segmentationShader;
     
     const int num_mode = 10;
-    int mode = num_mode - 1;
+//    int mode = num_mode - 1;
+    int mode = 0;
 public:
 	void setup() {
         grabber.setDeviceID(1);
@@ -56,6 +58,7 @@ public:
 #if OFX_VISION_VERSION_CHECK(12, 0)
         person.setup();
         person.setQualityLevel(ofxVisionPersonSegmentationQualityLevel::Balanced);
+        segmentationShader.load("shaders/segmentation");
 #endif
 #if OFX_VISION_VERSION_CHECK_X(10, 15)
         att_saliency.setup();
@@ -136,15 +139,20 @@ public:
                     }
                     break;
             }
-            prev.setFromPixels(grabber.getPixels());
         }
     }
     
 #if OFX_VISION_VERSION_CHECK(12, 0)
     void drawPersonSegmentation() {
+        ofEnableAlphaBlending();
         if(person.result) {
-            ofSetColor(0, 0, 255, 128);
-            person.result->draw(0, 0, 1280, 720);
+            ofSetColor(255, 255, 255);
+            if(prev.isAllocated()) prev.draw(0, 0, ofGetWidth(), ofGetHeight());
+            segmentationShader.begin();
+            segmentationShader.setUniform2f("size", ofGetWidth(), ofGetHeight());
+            segmentationShader.setUniformTexture("base", grabber.getTexture(), 2);
+            person.result->draw(0, 0, ofGetWidth(), ofGetHeight());
+            segmentationShader.end();
         }
     }
 #endif
@@ -498,15 +506,19 @@ public:
 #else
                 ofDrawBitmapStringHighlight("rectangles & face landmark detection", 20, 20);
 #endif
-                break;;
+                break;
         }
 
-	}
+        if(grabber.isFrameNew()) {
+            prev.setFromPixels(grabber.getPixels());
+        }
+	} // draw
 
 	void keyPressed(int key) {
         switch(key) {
             case 'R':
                 opticalShader.load("shaders/optical");
+                segmentationShader.load("shaders/segmentation");
                 break;
             case OF_KEY_LEFT:
                 mode = (mode + num_mode - 1) % num_mode;
