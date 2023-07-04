@@ -15,10 +15,27 @@
 #include <array>
 #include <vector>
 #include <string>
+#include <functional>
 
 namespace ofx {
     namespace Vision {
         namespace Observation {
+            namespace detail {
+                template <typename type>
+                struct inline_static_variable {
+                    static type &get() {
+                        static type _;
+                        return _;
+                    }
+                };
+                
+                struct dummy_ref {
+                    template <typename type>
+                    operator type &() {
+                        return inline_static_variable<type>::get();
+                    }
+                };
+            };
             struct Base {
                 float confidence;
                 std::string uuid;
@@ -67,13 +84,12 @@ namespace ofx {
                     RecognizedPoint mp;
                     RecognizedPoint cmc;
                     const RecognizedPoint &operator[](std::size_t n) const {
-                        static RecognizedPoint dummy;
                         switch(n) {
                             case 0: return cmc;
                             case 1: return mp;
                             case 2: return ip;
                             case 3: return tip;
-                            default: return dummy;
+                            default: return detail::dummy_ref{};
                         }
                     }
                     std::size_t size() const { return 4; }
@@ -84,13 +100,12 @@ namespace ofx {
                     RecognizedPoint pip;
                     RecognizedPoint mcp;
                     const RecognizedPoint &operator[](std::size_t n) const {
-                        static RecognizedPoint dummy;
                         switch(n) {
                             case 0: return mcp;
                             case 1: return pip;
                             case 2: return dip;
                             case 3: return tip;
-                            default: return dummy;
+                            default: return detail::dummy_ref{};
                         }
                     }
                     std::size_t size() const { return 4; }
@@ -101,13 +116,12 @@ namespace ofx {
                 JointGroup ring;
                 JointGroup little;
                 const JointGroup &operator[](std::size_t n) const {
-                    static JointGroup dummy;
                     switch(n) {
                         case 0: return index;
                         case 1: return middle;
                         case 2: return ring;
                         case 3: return little;
-                        default: return dummy;
+                        default: return detail::dummy_ref{};
                     }
                 }
                 std::size_t size() const { return 4; }
@@ -123,7 +137,6 @@ namespace ofx {
                     RecognizedPoint rightEar;
                     RecognizedPoint neck;
                     const RecognizedPoint &operator[](std::size_t i) const {
-                        static RecognizedPoint dummy;
                         switch(i) {
                             case 0: return leftEar;
                             case 1: return leftEye;
@@ -131,7 +144,7 @@ namespace ofx {
                             case 3: return rightEye;
                             case 4: return rightEar;
                             case 5: return neck;
-                            default: return dummy;
+                            default: return detail::dummy_ref{};
                         }
                     }
                     std::size_t size() const { return 6; }
@@ -141,12 +154,11 @@ namespace ofx {
                     RecognizedPoint elbow;
                     RecognizedPoint wrist;
                     const RecognizedPoint &operator[](std::size_t i) const {
-                        static RecognizedPoint dummy;
                         switch(i) {
                             case 0: return shoulder;
                             case 1: return elbow;
                             case 2: return wrist;
-                            default: return dummy;
+                            default: return detail::dummy_ref{};
                         }
                     }
                     std::size_t size() const { return 3; }
@@ -155,11 +167,10 @@ namespace ofx {
                     Arm left;
                     Arm right;
                     const Arm &operator[](std::size_t i) {
-                        static Arm dummy;
                         switch(i) {
                             case 0: return left;
                             case 1: return right;
-                            default: return dummy;
+                            default: return detail::dummy_ref{};
                         }
                     }
                     std::size_t size() const { return 2; }
@@ -170,12 +181,11 @@ namespace ofx {
                     RecognizedPoint knee;
                     RecognizedPoint ankle;
                     const RecognizedPoint &operator[](std::size_t i) const {
-                        static RecognizedPoint dummy;
                         switch(i) {
                             case 0: return hip;
                             case 1: return knee;
                             case 2: return ankle;
-                            default: return dummy;
+                            default: return detail::dummy_ref{};
                         }
                     }
                     std::size_t size() const { return 3; }
@@ -184,11 +194,10 @@ namespace ofx {
                     Leg left;
                     Leg right;
                     const Leg &operator[](std::size_t i) const {
-                        static Leg dummy;
                         switch(i) {
                             case 0: return left;
                             case 1: return right;
-                            default: return dummy;
+                            default: return detail::dummy_ref{};
                         }
                     }
                     std::size_t size() const { return 2; }
