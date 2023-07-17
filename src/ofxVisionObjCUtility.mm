@@ -33,6 +33,7 @@ namespace ofx {
 
 #if OFX_VISION_VERSION_CHECK_X(10, 15)
         Observation::SaliencyImage toOF(VNSaliencyImageObservation *saliencyResult) {
+            if(saliencyResult == nil) return {};
             Observation::SaliencyImage result;
             result.uuid = saliencyResult.uuid.UUIDString.UTF8String;
             result.featureName =  saliencyResult.featureName.UTF8String ?: "";

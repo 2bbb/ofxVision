@@ -439,6 +439,9 @@ public:
 #if OFX_VISION_VERSION_CHECK(12, 0)
                 drawPersonSegmentation();
                 ofDrawBitmapStringHighlight("person segmentation", 20, 20);
+                ofDrawBitmapStringHighlight("'a': Accurate", 20, 40);
+                ofDrawBitmapStringHighlight("'b': Balanced", 20, 60);
+                ofDrawBitmapStringHighlight("'f': Fast", 20, 80);
 #else
                 ofDrawBitmapStringHighlight("person segmentation is NOT Available on this macOS version need 12.0~", 20, 20);
 #endif
@@ -525,6 +528,15 @@ public:
                 break;
             case OF_KEY_RIGHT:
                 mode = (mode + 1) % num_mode;
+                break;
+            case 'a':
+                person.setQualityLevel(ofxVision::PersonSegmentationQualityLevel::Accurate);
+                break;
+            case 'b':
+                person.setQualityLevel(ofxVision::PersonSegmentationQualityLevel::Balanced);
+                break;
+            case 'f':
+                person.setQualityLevel(ofxVision::PersonSegmentationQualityLevel::Fast);
                 break;
             default: break;
         }

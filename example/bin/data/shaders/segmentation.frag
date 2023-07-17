@@ -18,6 +18,10 @@ void main()
     vec2 coord = gl_FragCoord.xy;
     coord.y = int(size.y) - coord.y;
     vec4 c = texture(base, coord);
-	outputColor = c * (1.0 - segmentation.r), 0.5);
+    if(segmentation.r < 0.1) {
+        outputColor = vec4(vec3(1.0) - c.rgb, 1.0);
+    } else {
+    	outputColor = vec4(c.rgb * (1.0 - segmentation.r), 0.2);
+    }
 //    outputColor = c;
 }
