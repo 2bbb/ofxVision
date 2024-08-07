@@ -529,6 +529,7 @@ public:
             case OF_KEY_RIGHT:
                 mode = (mode + 1) % num_mode;
                 break;
+#if OFX_VISION_VERSION_CHECK(12, 0)
             case 'a':
                 person.setQualityLevel(ofxVision::PersonSegmentationQualityLevel::Accurate);
                 break;
@@ -538,6 +539,7 @@ public:
             case 'f':
                 person.setQualityLevel(ofxVision::PersonSegmentationQualityLevel::Fast);
                 break;
+#endif
             default: break;
         }
     }

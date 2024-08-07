@@ -21,7 +21,7 @@ void main()
     */
     vec2 coord = gl_FragCoord.xy;
     coord.y = 720.0 - coord.y;
-    vec4 c = texture(base, coord + optical.rg * 3.0);
+    vec4 c = texture(base, coord + optical.rg * -3.0);
     optical.a = 0.5;
     c.a = abs(optical.r * optical.g);
 	outputColor = c;
