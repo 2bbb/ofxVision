@@ -52,7 +52,14 @@ class ofApp : public ofBaseApp {
     int mode = 0;
 public:
 	void setup() {
-        grabber.setDeviceID(1);
+        auto devices = grabber.listDevices();
+        for(auto i = 0; i < devices.size(); ++i) {
+            auto &&d = devices[i];
+            ofLogNotice() << d.deviceName;
+            if(ofIsStringInString(d.deviceName, "FaceTime")) {
+                grabber.setDeviceID(i);
+            }
+        }
         grabber.setup(1280, 720);
         
 #if OFX_VISION_VERSION_CHECK(12, 0)

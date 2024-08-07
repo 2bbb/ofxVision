@@ -17,7 +17,7 @@ namespace ofx {
         
         BaseRequest *Target::createRequest() const {
             auto request = [[VNDetectFaceLandmarksRequest alloc] init];
-            [request setUsesCPUOnly:NO];
+//            [request setUsesCPUOnly:NO];
             return OFX_VISION_AUTORELEASE(request);
         }
         
