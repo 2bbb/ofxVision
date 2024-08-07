@@ -29,7 +29,7 @@ namespace ofx {
         }
         
         Target::ResultType Target::createResult(void *req) const {
-            Target::Request *request = (Target::Request *)req;
+            Target::Request *request = (OFX_VISION_BRIDGE Target::Request *)req;
             Target::ResultType result;
             result.resize(request.results.count);
             for(auto i = 0; i < result.size(); ++i) {

@@ -15,11 +15,11 @@ namespace ofx {
         {
             NSMutableArray<VNImageBasedRequest *> *requests = [NSMutableArray array];
             for(auto i = 0; i < request_vec.size(); ++i) {
-                [requests addObject:(VNImageBasedRequest *)request_vec[i]];
+                [requests addObject:(OFX_VISION_BRIDGE VNImageBasedRequest *)request_vec[i]];
             }
             NSError *err = nil;
-            BOOL success= [(Handler *)handler performRequests:requests
-                                                    onCIImage:(CIImage *)image
+            BOOL success= [(OFX_VISION_BRIDGE Handler *)handler performRequests:requests
+                                                    onCIImage:(OFX_VISION_BRIDGE CIImage *)image
                                                   orientation:kCGImagePropertyOrientationUp
                                                         error:&err];
             if(err) {

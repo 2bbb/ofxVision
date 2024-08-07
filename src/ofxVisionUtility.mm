@@ -12,15 +12,18 @@
 namespace ofx {
     namespace Vision {
         void *objc_retain(void *obj) {
-            return OFX_VISION_RETAIN((id)obj);
+            return (OFX_VISION_BRIDGE void *)OFX_VISION_RETAIN((OFX_VISION_BRIDGE id)obj);
         }
 
         void objc_release(void *obj) {
-            OFX_VISION_RELEASE((id)obj);
+            OFX_VISION_RELEASE((OFX_VISION_BRIDGE id)obj);
+        }
+        void objc_release(id obj) {
+            OFX_VISION_RELEASE(obj);
         }
 
         void *objc_autorelease(void *obj) {
-            return OFX_VISION_AUTORELEASE((id)obj);
+            return (OFX_VISION_BRIDGE void *)OFX_VISION_AUTORELEASE((OFX_VISION_BRIDGE id)obj);
         }
 
         std::shared_ptr<ofImage> pixelBufferToOfImage(CVPixelBufferRef pixelBuffer) {
@@ -137,13 +140,13 @@ namespace ofx {
 
         
         ofxVisionCIImage *toCIImage(const ofPixels &pix)
-        { return [CIImage imageWithCGImage:ofPixelsToCGImageRef(pix)]; };
+        { return (OFX_VISION_BRIDGE ofxVisionCIImage *)[CIImage imageWithCGImage:ofPixelsToCGImageRef(pix)]; };
         ofxVisionCIImage *toCIImage(const ofBaseHasPixels &pix)
         { return toCIImage(pix.getPixels()); };
         ofxVisionCIImage *toCIImage(CVPixelBufferRef pixelBuffer)
-        { return [CIImage imageWithCVPixelBuffer:pixelBuffer]; };
+        { return (OFX_VISION_BRIDGE ofxVisionCIImage *)[CIImage imageWithCVPixelBuffer:pixelBuffer]; };
         ofxVisionCIImage *toCIImage(IOSurfaceRef surface)
-        { return [CIImage imageWithIOSurface:surface]; };
+        { return (OFX_VISION_BRIDGE ofxVisionCIImage *)[CIImage imageWithIOSurface:surface]; };
         
         Handler *createHandler() {
             return [[Handler alloc] init];

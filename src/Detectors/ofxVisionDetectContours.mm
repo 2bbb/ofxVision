@@ -27,7 +27,7 @@ namespace ofx {
         }
         
         Target::ResultType Target::createResult(void *req) const {
-            Target::Request *request = (Target::Request *)req;
+            Target::Request *request = (OFX_VISION_BRIDGE Target::Request *)req;
             Target::ResultType result;
             if(request.results.firstObject) result = toOF(request.results.firstObject);
             return result;

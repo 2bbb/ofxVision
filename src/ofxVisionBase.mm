@@ -15,8 +15,8 @@ namespace ofx {
                         const std::string &name)
         {
             NSError *err = nil;
-            [(Handler *)handler performRequests:@[(BaseRequest *)request]
-                                      onCIImage:(CIImage *)image
+            [(OFX_VISION_BRIDGE Handler *)handler performRequests:@[(OFX_VISION_BRIDGE BaseRequest *)request]
+                                      onCIImage:(OFX_VISION_BRIDGE CIImage *)image
                                     orientation:kCGImagePropertyOrientationUp
                                           error:&err];
             if(err) {

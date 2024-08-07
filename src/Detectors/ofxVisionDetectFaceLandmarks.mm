@@ -17,12 +17,12 @@ namespace ofx {
         
         BaseRequest *Target::createRequest() const {
             auto request = [[VNDetectFaceLandmarksRequest alloc] init];
-            
+            [request setUsesCPUOnly:NO];
             return OFX_VISION_AUTORELEASE(request);
         }
         
         Target::ResultType Target::createResult(void *req) const {
-            Target::Request *request = (Target::Request *)req;
+            Target::Request *request = (OFX_VISION_BRIDGE Target::Request *)req;
             
             Target::ResultType result;
             result.resize(request.results.count);

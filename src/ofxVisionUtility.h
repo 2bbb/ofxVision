@@ -6,9 +6,11 @@
 
 #pragma once
 
+#include "ofPixels.h"
 #include "ofImage.h"
 #include "ofVectorMath.h"
 #include "ofRectangle.h"
+#include "ofLog.h"
 
 #import <CoreGraphics/CoreGraphics.h>
 #import <CoreVideo/CoreVideo.h>
@@ -44,6 +46,9 @@ namespace ofx {
         
         void *objc_retain(void *obj);
         void objc_release(void *obj);
+#ifdef __OBJC__
+        void objc_release(id obj);
+#endif
         void *objc_autorelease(void *obj);
 
         std::shared_ptr<ofImage> pixelBufferToOfImage(CVPixelBufferRef pixelBuffer);

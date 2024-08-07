@@ -34,12 +34,12 @@ namespace ofx {
         
         void Target::setBaseImage(ofxVisionCIImage *image) {
             releaseImage();
-            settings.baseImage = OFX_VISION_RETAIN((CIImage *)image);
+            settings.baseImage = (OFX_VISION_BRIDGE  void *)OFX_VISION_RETAIN((OFX_VISION_BRIDGE CIImage *)image);
         }
 
         
         BaseRequest *Target::createRequest() const {
-            auto request = [[Target::Request alloc] initWithTargetedCIImage:(CIImage *)settings.baseImage
+            auto request = [[Target::Request alloc] initWithTargetedCIImage:(OFX_VISION_BRIDGE CIImage *)settings.baseImage
                                                                                                           options:@{}];
             
             request.computationAccuracy = conv(settings.accuracyLevel);
@@ -48,7 +48,7 @@ namespace ofx {
         }
         
         Target::ResultType Target::createResult(void *req) const {
-            Target::Request *request = (Target::Request *)req;
+            Target::Request *request = (OFX_VISION_BRIDGE Target::Request *)req;
             CVPixelBufferRef pixelBuffer = request.results.firstObject.pixelBuffer;
             return pixelBufferToOfFloatTexture(pixelBuffer);
         }
